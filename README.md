@@ -7,9 +7,9 @@
 [![Lighthouse Performance Badge](./results/lighthouse_performance.svg)](https://github.com/emazzotta/lighthouse-badges)
 [![Lighthouse SEO Badge](./results/lighthouse_seo.svg)](https://github.com/emazzotta/lighthouse-badges) [![security headers](https://img.shields.io/security-headers?url=https%3A%2F%2Fwww.privacyprotect.dev%2F)](https://securityheaders.com/?q=https%3A%2F%2Fwww.privacyprotect.dev%2F&hide=on&followRedirects=on) [![SSL Rating](https://img.shields.io/badge/qualys%20ssl-A%2B-brightgreen)](https://www.ssllabs.com/ssltest/analyze.html?d=privacyprotect.dev) [![Ahrefs Health](https://img.shields.io/badge/ahrefs%20health-100-brightgreen)](https://ahrefs.com/site-audit) [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/RichardLitt/standard-readme)
 
-Securely share and store passwords and sensitive files using only web browser crypto APIs. Available at [privacyprotect.dev](https://www.privacyprotect.dev/).
+Securely share and store passwords and sensitive files using only web browser crypto APIs. Available at [privacyprotect.dev](https://www.privacyprotect.dev/?utm_source=github&utm_medium=social&utm_content=readme).
 
-See the [launch blog](https://www.rocky.dev/blog/introducing-privacyprotect) for details.
+See the [launch blog](https://www.rocky.dev/blog/introducing-privacyprotect?utm_source=github&utm_medium=social&utm_campaign=blog&utm_content=readme) for details.
 
 ## Table of Contents
 
