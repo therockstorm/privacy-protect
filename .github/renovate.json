@@ -1,0 +1,12 @@
+{
+  "extends": [
+    ":combinePatchMinorReleases",
+    ":disableRateLimiting",
+    ":enableVulnerabilityAlertsWithLabel(security)",
+    ":timezone(America/Denver)",
+    "config:js-app",
+    "group:allNonMajor",
+    "npm:unpublishSafe",
+    "schedule:monthly"
+  ]
+}

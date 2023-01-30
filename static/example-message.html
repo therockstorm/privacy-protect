@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="https://www.privacyprotect.dev/favicon.svg" />
+
+    <title>PrivacyProtect - Reveal secret</title>
+    <style>
+      /*! tailwindcss v3.2.4 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;font-feature-settings:normal}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:initial}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;font-weight:inherit;line-height:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}[type=button],[type=reset],[type=submit],button{-webkit-appearance:button;background-color:initial;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:initial}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]{display:none}[multiple],[type=date],[type=datetime-local],[type=email],[type=month],[type=number],[type=password],[type=search],[type=tel],[type=text],[type=time],[type=url],[type=week],select,textarea{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:#fff;border-color:#6b7280;border-width:1px;border-radius:0;padding:.5rem .75rem;font-size:1rem;line-height:1.5rem;--tw-shadow:0 0 #0000}[multiple]:focus,[type=date]:focus,[type=datetime-local]:focus,[type=email]:focus,[type=month]:focus,[type=number]:focus,[type=password]:focus,[type=search]:focus,[type=tel]:focus,[type=text]:focus,[type=time]:focus,[type=url]:focus,[type=week]:focus,select:focus,textarea:focus{outline:2px solid #0000;outline-offset:2px;--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:#2563eb;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow);border-color:#2563eb}input::-moz-placeholder,textarea::-moz-placeholder{color:#6b7280;opacity:1}input::placeholder,textarea::placeholder{color:#6b7280;opacity:1}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-date-and-time-value{min-height:1.5em}::-webkit-datetime-edit,::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-meridiem-field,::-webkit-datetime-edit-millisecond-field,::-webkit-datetime-edit-minute-field,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-second-field,::-webkit-datetime-edit-year-field{padding-top:0;padding-bottom:0}select{background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3E%3C/svg%3E");background-position:right .5rem center;background-repeat:no-repeat;background-size:1.5em 1.5em;padding-right:2.5rem;-webkit-print-color-adjust:exact;print-color-adjust:exact}[multiple]{background-image:none;background-position:0 0;background-repeat:unset;background-size:initial;padding-right:.75rem;-webkit-print-color-adjust:unset;print-color-adjust:unset}[type=checkbox],[type=radio]{-webkit-appearance:none;-moz-appearance:none;appearance:none;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block;vertical-align:middle;background-origin:border-box;-webkit-user-select:none;-moz-user-select:none;user-select:none;flex-shrink:0;height:1rem;width:1rem;color:#2563eb;background-color:#fff;border-color:#6b7280;border-width:1px;--tw-shadow:0 0 #0000}[type=checkbox]{border-radius:0}[type=radio]{border-radius:100%}[type=checkbox]:focus,[type=radio]:focus{outline:2px solid #0000;outline-offset:2px;--tw-ring-inset:var(--tw-empty,/*!*/ /*!*/);--tw-ring-offset-width:2px;--tw-ring-offset-color:#fff;--tw-ring-color:#2563eb;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}[type=checkbox]:checked,[type=radio]:checked{border-color:#0000;background-color:currentColor;background-size:100% 100%;background-position:50%;background-repeat:no-repeat}[type=checkbox]:checked{background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0z'/%3E%3C/svg%3E")}[type=radio]:checked{background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 16 16' fill='%23fff' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='8' cy='8' r='3'/%3E%3C/svg%3E")}[type=checkbox]:checked:focus,[type=checkbox]:checked:hover,[type=checkbox]:indeterminate,[type=radio]:checked:focus,[type=radio]:checked:hover{border-color:#0000;background-color:currentColor}[type=checkbox]:indeterminate{background-image:url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8h8'/%3E%3C/svg%3E");background-size:100% 100%;background-position:50%;background-repeat:no-repeat}[type=checkbox]:indeterminate:focus,[type=checkbox]:indeterminate:hover{border-color:#0000;background-color:currentColor}[type=file]{background:unset;border-color:inherit;border-width:0;border-radius:0;padding:0;font-size:unset;line-height:inherit}[type=file]:focus{outline:1px solid ButtonText;outline:1px auto -webkit-focus-ring-color}*,::backdrop,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:#3b82f680;--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.prose{color:var(--tw-prose-body);max-width:65ch}.prose :where(p):not(:where([class~=not-prose] *)){margin-top:1.25em;margin-bottom:1.25em}.prose :where([class~=lead]):not(:where([class~=not-prose] *)){color:var(--tw-prose-lead);font-size:1.25em;line-height:1.6;margin-top:1.2em;margin-bottom:1.2em}.prose :where(a):not(:where([class~=not-prose] *)){color:var(--tw-prose-links);text-decoration:underline;font-weight:500}.prose :where(strong):not(:where([class~=not-prose] *)){color:var(--tw-prose-bold);font-weight:600}.prose :where(a strong):not(:where([class~=not-prose] *)){color:inherit}.prose :where(blockquote strong):not(:where([class~=not-prose] *)){color:inherit}.prose :where(thead th strong):not(:where([class~=not-prose] *)){color:inherit}.prose :where(ol):not(:where([class~=not-prose] *)){list-style-type:decimal;margin-top:1.25em;margin-bottom:1.25em;padding-left:1.625em}.prose :where(ol[type=A]):not(:where([class~=not-prose] *)){list-style-type:upper-alpha}.prose :where(ol[type=a]):not(:where([class~=not-prose] *)){list-style-type:lower-alpha}.prose :where(ol[type=A s]):not(:where([class~=not-prose] *)){list-style-type:upper-alpha}.prose :where(ol[type=a s]):not(:where([class~=not-prose] *)){list-style-type:lower-alpha}.prose :where(ol[type=I]):not(:where([class~=not-prose] *)){list-style-type:upper-roman}.prose :where(ol[type=i]):not(:where([class~=not-prose] *)){list-style-type:lower-roman}.prose :where(ol[type=I s]):not(:where([class~=not-prose] *)){list-style-type:upper-roman}.prose :where(ol[type=i s]):not(:where([class~=not-prose] *)){list-style-type:lower-roman}.prose :where(ol[type="1"]):not(:where([class~=not-prose] *)){list-style-type:decimal}.prose :where(ul):not(:where([class~=not-prose] *)){list-style-type:disc;margin-top:1.25em;margin-bottom:1.25em;padding-left:1.625em}.prose :where(ol>li):not(:where([class~=not-prose] *))::marker{font-weight:400;color:var(--tw-prose-counters)}.prose :where(ul>li):not(:where([class~=not-prose] *))::marker{color:var(--tw-prose-bullets)}.prose :where(hr):not(:where([class~=not-prose] *)){border-color:var(--tw-prose-hr);border-top-width:1px;margin-top:3em;margin-bottom:3em}.prose :where(blockquote):not(:where([class~=not-prose] *)){font-weight:500;font-style:italic;color:var(--tw-prose-quotes);border-left-width:.25rem;border-left-color:var(--tw-prose-quote-borders);quotes:"\201C""\201D""\2018""\2019";margin-top:1.6em;margin-bottom:1.6em;padding-left:1em}.prose :where(blockquote p:first-of-type):not(:where([class~=not-prose] *)):before{content:open-quote}.prose :where(blockquote p:last-of-type):not(:where([class~=not-prose] *)):after{content:close-quote}.prose :where(h1):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:800;font-size:2.25em;margin-top:0;margin-bottom:.8888889em;line-height:1.1111111}.prose :where(h1 strong):not(:where([class~=not-prose] *)){font-weight:900;color:inherit}.prose :where(h2):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:700;font-size:1.5em;margin-top:2em;margin-bottom:1em;line-height:1.3333333}.prose :where(h2 strong):not(:where([class~=not-prose] *)){font-weight:800;color:inherit}.prose :where(h3):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:600;font-size:1.25em;margin-top:1.6em;margin-bottom:.6em;line-height:1.6}.prose :where(h3 strong):not(:where([class~=not-prose] *)){font-weight:700;color:inherit}.prose :where(h4):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:600;margin-top:1.5em;margin-bottom:.5em;line-height:1.5}.prose :where(h4 strong):not(:where([class~=not-prose] *)){font-weight:700;color:inherit}.prose :where(img):not(:where([class~=not-prose] *)){margin-top:2em;margin-bottom:2em}.prose :where(figure>*):not(:where([class~=not-prose] *)){margin-top:0;margin-bottom:0}.prose :where(figcaption):not(:where([class~=not-prose] *)){color:var(--tw-prose-captions);font-size:.875em;line-height:1.4285714;margin-top:.8571429em}.prose :where(code):not(:where([class~=not-prose] *)){color:var(--tw-prose-code);font-weight:600;font-size:.875em}.prose :where(code):not(:where([class~=not-prose] *)):before{content:"`"}.prose :where(code):not(:where([class~=not-prose] *)):after{content:"`"}.prose :where(a code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(h1 code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(h2 code):not(:where([class~=not-prose] *)){color:inherit;font-size:.875em}.prose :where(h3 code):not(:where([class~=not-prose] *)){color:inherit;font-size:.9em}.prose :where(h4 code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(blockquote code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(thead th code):not(:where([class~=not-prose] *)){color:inherit}.prose :where(pre):not(:where([class~=not-prose] *)){color:var(--tw-prose-pre-code);background-color:var(--tw-prose-pre-bg);overflow-x:auto;font-weight:400;font-size:.875em;line-height:1.7142857;margin-top:1.7142857em;margin-bottom:1.7142857em;border-radius:.375rem;padding:.8571429em 1.1428571em}.prose :where(pre code):not(:where([class~=not-prose] *)){background-color:initial;border-width:0;border-radius:0;padding:0;font-weight:inherit;color:inherit;font-size:inherit;font-family:inherit;line-height:inherit}.prose :where(pre code):not(:where([class~=not-prose] *)):before{content:none}.prose :where(pre code):not(:where([class~=not-prose] *)):after{content:none}.prose :where(table):not(:where([class~=not-prose] *)){width:100%;table-layout:auto;text-align:left;margin-top:2em;margin-bottom:2em;font-size:.875em;line-height:1.7142857}.prose :where(thead):not(:where([class~=not-prose] *)){border-bottom-width:1px;border-bottom-color:var(--tw-prose-th-borders)}.prose :where(thead th):not(:where([class~=not-prose] *)){color:var(--tw-prose-headings);font-weight:600;vertical-align:bottom;padding-right:.5714286em;padding-bottom:.5714286em;padding-left:.5714286em}.prose :where(tbody tr):not(:where([class~=not-prose] *)){border-bottom-width:1px;border-bottom-color:var(--tw-prose-td-borders)}.prose :where(tbody tr:last-child):not(:where([class~=not-prose] *)){border-bottom-width:0}.prose :where(tbody td):not(:where([class~=not-prose] *)){vertical-align:initial}.prose :where(tfoot):not(:where([class~=not-prose] *)){border-top-width:1px;border-top-color:var(--tw-prose-th-borders)}.prose :where(tfoot td):not(:where([class~=not-prose] *)){vertical-align:top}.prose{--tw-prose-body:#374151;--tw-prose-headings:#111827;--tw-prose-lead:#4b5563;--tw-prose-links:#111827;--tw-prose-bold:#111827;--tw-prose-counters:#6b7280;--tw-prose-bullets:#d1d5db;--tw-prose-hr:#e5e7eb;--tw-prose-quotes:#111827;--tw-prose-quote-borders:#e5e7eb;--tw-prose-captions:#6b7280;--tw-prose-code:#111827;--tw-prose-pre-code:#e5e7eb;--tw-prose-pre-bg:#1f2937;--tw-prose-th-borders:#d1d5db;--tw-prose-td-borders:#e5e7eb;--tw-prose-invert-body:#d1d5db;--tw-prose-invert-headings:#fff;--tw-prose-invert-lead:#9ca3af;--tw-prose-invert-links:#fff;--tw-prose-invert-bold:#fff;--tw-prose-invert-counters:#9ca3af;--tw-prose-invert-bullets:#4b5563;--tw-prose-invert-hr:#374151;--tw-prose-invert-quotes:#f3f4f6;--tw-prose-invert-quote-borders:#374151;--tw-prose-invert-captions:#9ca3af;--tw-prose-invert-code:#fff;--tw-prose-invert-pre-code:#d1d5db;--tw-prose-invert-pre-bg:#00000080;--tw-prose-invert-th-borders:#4b5563;--tw-prose-invert-td-borders:#374151;font-size:1rem;line-height:1.75}.prose :where(video):not(:where([class~=not-prose] *)){margin-top:2em;margin-bottom:2em}.prose :where(figure):not(:where([class~=not-prose] *)){margin-top:2em;margin-bottom:2em}.prose :where(li):not(:where([class~=not-prose] *)){margin-top:.5em;margin-bottom:.5em}.prose :where(ol>li):not(:where([class~=not-prose] *)){padding-left:.375em}.prose :where(ul>li):not(:where([class~=not-prose] *)){padding-left:.375em}.prose :where(.prose>ul>li p):not(:where([class~=not-prose] *)){margin-top:.75em;margin-bottom:.75em}.prose :where(.prose>ul>li>:first-child):not(:where([class~=not-prose] *)){margin-top:1.25em}.prose :where(.prose>ul>li>:last-child):not(:where([class~=not-prose] *)){margin-bottom:1.25em}.prose :where(.prose>ol>li>:first-child):not(:where([class~=not-prose] *)){margin-top:1.25em}.prose :where(.prose>ol>li>:last-child):not(:where([class~=not-prose] *)){margin-bottom:1.25em}.prose :where(ul ul,ul ol,ol ul,ol ol):not(:where([class~=not-prose] *)){margin-top:.75em;margin-bottom:.75em}.prose :where(hr+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(h2+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(h3+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(h4+*):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(thead th:first-child):not(:where([class~=not-prose] *)){padding-left:0}.prose :where(thead th:last-child):not(:where([class~=not-prose] *)){padding-right:0}.prose :where(tbody td,tfoot td):not(:where([class~=not-prose] *)){padding:.5714286em}.prose :where(tbody td:first-child,tfoot td:first-child):not(:where([class~=not-prose] *)){padding-left:0}.prose :where(tbody td:last-child,tfoot td:last-child):not(:where([class~=not-prose] *)){padding-right:0}.prose :where(.prose>:first-child):not(:where([class~=not-prose] *)){margin-top:0}.prose :where(.prose>:last-child):not(:where([class~=not-prose] *)){margin-bottom:0}.prose-emerald{--tw-prose-links:#059669;--tw-prose-invert-links:#10b981}.relative{position:relative}.z-10{z-index:10}.mx-auto{margin-left:auto;margin-right:auto}.my-6{margin-top:1.5rem;margin-bottom:1.5rem}.my-4{margin-top:1rem;margin-bottom:1rem}.my-1{margin-top:.25rem;margin-bottom:.25rem}.mb-3{margin-bottom:.75rem}.mb-4{margin-bottom:1rem}.mt-1{margin-top:.25rem}.-ml-px{margin-left:-1px}.mt-2{margin-top:.5rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-4{height:1rem}.max-h-96{max-height:24rem}.w-10{width:2.5rem}.w-4{width:1rem}.w-full{width:100%}.max-w-3xl{max-width:48rem}.max-w-none{max-width:none}.flex-1{flex:1 1 0%}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(.4,0,.6,1) infinite}.resize-none{resize:none}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}.items-center{align-items:center}.justify-end{justify-content:flex-end}.justify-center{justify-content:center}.gap-2{gap:.5rem}.gap-y-4{row-gap:1rem}.gap-x-4{-moz-column-gap:1rem;column-gap:1rem}.overflow-hidden{overflow:hidden}.overflow-x-hidden{overflow-x:hidden}.rounded-lg{border-radius:.5rem}.rounded-md{border-radius:.375rem}.rounded-l-md{border-top-left-radius:.375rem;border-bottom-left-radius:.375rem}.rounded-r-md{border-top-right-radius:.375rem;border-bottom-right-radius:.375rem}.border{border-width:1px}.border-gray-300{--tw-border-opacity:1;border-color:rgb(209 213 219/var(--tw-border-opacity))}.border-transparent{border-color:#0000}.bg-gray-50{--tw-bg-opacity:1;background-color:rgb(249 250 251/var(--tw-bg-opacity))}.bg-gray-100{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity))}.bg-emerald-700{--tw-bg-opacity:1;background-color:rgb(4 120 87/var(--tw-bg-opacity))}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-4{padding-left:1rem;padding-right:1rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.pt-5{padding-top:1.25rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:.875rem;line-height:1.25rem}.font-medium{font-weight:500}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81/var(--tw-text-opacity))}.text-red-600{--tw-text-opacity:1;color:rgb(220 38 38/var(--tw-text-opacity))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255/var(--tw-text-opacity))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55/var(--tw-text-opacity))}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.input-border{--tw-border-opacity:1;border-color:rgb(209 213 219/var(--tw-border-opacity))}.input-border:focus{--tw-border-opacity:1;border-color:rgb(16 185 129/var(--tw-border-opacity));--tw-ring-opacity:1;--tw-ring-color:rgb(16 185 129/var(--tw-ring-opacity))}.input-error{--tw-border-opacity:1;border-color:rgb(252 165 165/var(--tw-border-opacity))}.input-error:focus{--tw-border-opacity:1;border-color:rgb(239 68 68/var(--tw-border-opacity));--tw-ring-opacity:1;--tw-ring-color:rgb(239 68 68/var(--tw-ring-opacity))}.focus-within\:z-10:focus-within{z-index:10}.hover\:bg-gray-100:hover{--tw-bg-opacity:1;background-color:rgb(243 244 246/var(--tw-bg-opacity))}.hover\:bg-emerald-800:hover{--tw-bg-opacity:1;background-color:rgb(6 95 70/var(--tw-bg-opacity))}.hover\:text-emerald-600:hover{--tw-text-opacity:1;color:rgb(5 150 105/var(--tw-text-opacity))}.focus\:border-emerald-500:focus{--tw-border-opacity:1;border-color:rgb(16 185 129/var(--tw-border-opacity))}.focus\:outline-none:focus{outline:2px solid #0000;outline-offset:2px}.focus\:ring-1:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\:ring-1:focus,.focus\:ring-2:focus{box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow,0 0 #0000)}.focus\:ring-2:focus{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color)}.focus\:ring-emerald-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(16 185 129/var(--tw-ring-opacity))}.focus\:ring-offset-2:focus{--tw-ring-offset-width:2px}.disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:bg-gray-600:disabled{--tw-bg-opacity:1;background-color:rgb(75 85 99/var(--tw-bg-opacity))}@media (min-width:640px){.sm\:col-span-6{grid-column:span 6/span 6}.sm\:grid-cols-6{grid-template-columns:repeat(6,minmax(0,1fr))}}
+    </style>
+    <script>
+      const CONFIG = {"aesGcm":"AES-GCM","iterations":2100000,"keyLen":32,"pbkdf2":"PBKDF2","hash":"SHA-512","cipher":"071f45f9b3037bb0a3fec86e6195932ef304cd83305f5681fe83b030d489ad897e428c8c3b7365d933f675a4aa45575109ec85b70f59cf152621d03bbfdfda989845b875edb485e4c0c8e303e45775cdebfcba585994c601ab6576551a5fa8d8e2dcc617e8137a93069b725fed29a6cb3ff916649ffbe263f556f0b034a37cb8734d049a89960abfbba1320fd1364fd554f57f2c59d33435adca323d6db6","iv":"c705d1884eb459636fe0d9a29232f2a5f6ba59dc0e19db8cf2f493f16921582b","salt":"d70e377bf779d3b0fcfcff36619a959e7559fcc6acbf6ee653dbe5eb485eb7bb","passwordHint":"Three letters, all lowercase: an animal, commonly a pet, that barks.\n\n(Please use stronger passwords for your secrets!)","secretType":"Message"};
+      const ELS = {
+        file: undefined,
+        img: undefined,
+        message: undefined,
+        pw: undefined,
+        pwError: undefined,
+        pwHint: undefined,
+        pwHintDiv: undefined,
+        pwShow: undefined,
+        pwHide: undefined,
+        revealBtn: undefined,
+        saveBtn: undefined,
+      };
+      const IMG_EXTS = ["jpg", "jpeg", "png", "gif", "webp"];
+      let showPassword = false;
+
+      function init() {
+        Object.keys(ELS).forEach((k) => {
+          ELS[k] = document.getElementById(k);
+        });
+
+        if (CONFIG.passwordHint) ELS.pwHint.innerHTML = CONFIG.passwordHint;
+        else ELS.pwHintDiv.classList.add("hidden");
+
+        ELS.pw.addEventListener("keyup", (event) => {
+          if (event.key === "Enter") revealSecret();
+        });
+        ELS.pw.addEventListener("input", (e) => {
+          inputError(ELS.pw, ELS.pwError, "");
+        });
+      }
+
+      function togglePwVisibility() {
+        showPassword = !showPassword;
+
+        if (showPassword) {
+          ELS.pw.type = "text";
+          ELS.pwShow.classList.add("hidden");
+          ELS.pwHide.classList.remove("hidden");
+        } else {
+          ELS.pw.type = "password";
+          ELS.pwShow.classList.remove("hidden");
+          ELS.pwHide.classList.add("hidden");
+        }
+      }
+
+      async function revealSecret(e) {
+        const pw = ELS.pw.value;
+        if (pw.length == 0) return;
+
+        e = e ?? window.event;
+        e.preventDefault();
+        let plainText;
+        try {
+          ELS.revealBtn.classList.add("animate-pulse");
+          const { aesGcm, cipher, iterations, keyLen, pbkdf2, hash } = CONFIG;
+          const salt = hexStringToBytes(CONFIG.salt);
+          const importedKey = await window.crypto.subtle.importKey(
+            "raw",
+            new TextEncoder().encode(pw),
+            { name: pbkdf2 },
+            false,
+            ["deriveKey"]
+          );
+          const derivedKey = await window.crypto.subtle.deriveKey(
+            { name: pbkdf2, salt, iterations: iterations, hash },
+            importedKey,
+            { name: aesGcm, length: keyLen * 8 },
+            false,
+            ["decrypt"]
+          );
+          plainText = await window.crypto.subtle.decrypt(
+            { name: aesGcm, iv: hexStringToBytes(CONFIG.iv) },
+            derivedKey,
+            hexStringToBytes(cipher)
+          );
+          ELS.pw.value = "";
+        } catch (error) {
+          inputError(ELS.pw, ELS.pwError, "Password invalid.");
+          return;
+        } finally {
+          ELS.revealBtn.classList.remove("animate-pulse");
+        }
+
+        const { fileExtension, secretType } = CONFIG;
+        if (secretType == "Message") {
+          const message = new TextDecoder().decode(plainText);
+          ELS.message.innerHTML = message;
+        } else if (secretType == "File") {
+          ELS.message.classList.add("hidden");
+          ELS.saveBtn.classList.remove("hidden");
+          const isImg = IMG_EXTS.includes(fileExtension);
+          const fileName = `privacyprotect.${fileExtension}`;
+          const b64 = btoa(
+            new Uint8Array(plainText).reduce(
+              (a, b) => a + String.fromCharCode(b),
+              ""
+            )
+          );
+          const file = isImg
+            ? `data:image/${fileExtension};base64,${b64}`
+            : `data:application/octet-stream;base64,${b64}`;
+          ELS.saveBtn.innerHTML = `Save ${fileName}`;
+          ELS.file.setAttribute("download", fileName);
+          ELS.file.setAttribute("href", file);
+          if (isImg) {
+            ELS.img.setAttribute("src", file);
+            ELS.img.classList.remove("hidden");
+          }
+        } else console.error(`Invalid secret type ${secretType}`);
+      }
+
+      function hexStringToBytes(hex) {
+        const bytes = [];
+        for (let c = 0; c < hex.length; c += 2) {
+          bytes.push(parseInt(hex.substring(c, c + 2), 16));
+        }
+        return Uint8Array.from(bytes);
+      }
+
+      function inputError(el, errorEl, error) {
+        errorEl.innerHTML = error;
+        el.classList.toggle("input-error", !!error);
+      }
+    </script>
+  </head>
+  <body onload="init()">
+    <div class="mx-auto my-6 max-w-3xl overflow-x-hidden px-6">
+      <header class="my-4">
+        <a href="https://www.privacyprotect.dev/">
+          <div class="flex gap-2 items-center">
+            <svg
+              class="h-10 w-10"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M280 258.4V328c0 13.25-10.75 24-24 24s-24-10.75-24-24V258.4C213.1 249.4 200 230.3 200 208c0-30.93 25.07-56 56-56s56 25.07 56 56C312 230.3 298.9 249.4 280 258.4z"
+              />
+              <path
+                d="M466.5 83.69l-192-80.01C269.6 1.656 261.3 0 256.1 0C250.8 0 242.5 1.656 237.6 3.688l-192 80.01C27.69 91.08 16 108.6 16 127.1C16 385.2 205.2 512 255.1 512C307.1 512 496 383.8 496 127.1C496 108.6 484.3 91.08 466.5 83.69zM280 258.4V328c0 13.25-10.75 24-24 24s-24-10.75-24-24V258.4C213.1 249.4 200 230.3 200 208c0-30.93 25.07-56 56-56s56 25.07 56 56C312 230.3 298.9 249.4 280 258.4z"
+                fill="#34d399"
+              />
+            </svg>
+            <h1 class="font-medium text-3xl">PrivacyProtect</h1>
+          </div>
+        </a>
+      </header>
+      <main>
+        <div class="mb-3 prose prose-emerald max-w-none">
+          <p>This page contains a secret, enter the password to reveal it.</p>
+          <p>
+            If a password hint is provided and you still cannot guess the
+            password, contact the sender.
+          </p>
+          <p>
+            The secret is safe; <strong>it never leaves your device</strong>.
+            No internet connection required.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-lg bg-gray-50 mb-4">
+          <div class="px-4 py-5">
+            <form>
+              <div class="grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-6">
+                <div class="sm:col-span-6">
+                  <label for="pw">Password</label>
+                  <div class="mt-1 flex rounded-md">
+                    <input
+                      autocomplete="on"
+                      autofocus
+                      class="input-border rounded-l-md flex-1 text-sm z-10"
+                      id="pw"
+                      name="pw"
+                      required
+                      spellcheck="false"
+                      type="password"
+                    />
+                    <button
+                      class="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus-within:z-10"
+                      onclick="togglePwVisibility(event)"
+                      type="button"
+                    >
+                      <svg
+                        id="pwShow"
+                        class="h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 576 512"
+                      >
+                        <path
+                          d="M400 256C400 317.9 349.9 368 288 368C226.1 368 176 317.9 176 256C176 194.1 226.1 144 288 144C349.9 144 400 194.1 400 256zM288 160C234.1 160 192 202.1 192 256C192 309 234.1 352 288 352C341 352 384 309 384 256C384 202.1 341 160 288 160zM480.6 112.6C527.4 156 558.7 207.1 573.5 243.7C576.8 251.6 576.8 260.4 573.5 268.3C558.7 304 527.4 355.1 480.6 399.4C433.5 443.2 368.8 480 288 480C207.2 480 142.5 443.2 95.42 399.4C48.62 355.1 17.34 304 2.461 268.3C-.8205 260.4-.8205 251.6 2.461 243.7C17.34 207.1 48.62 156 95.42 112.6C142.5 68.84 207.2 32 288 32C368.8 32 433.5 68.84 480.6 112.6V112.6zM17.23 249.8C15.59 253.8 15.59 258.2 17.23 262.2C31.34 296 61.38 345.1 106.3 387.7C151.4 429.6 212.4 464 288 464C363.6 464 424.6 429.6 469.7 387.7C514.6 345.1 544.7 296 558.8 262.2C560.4 258.2 560.4 253.8 558.8 249.8C544.7 215.1 514.6 166 469.7 124.3C424.6 82.41 363.6 48 288 48C212.4 48 151.4 82.41 106.3 124.3C61.38 166 31.34 215.1 17.23 249.8V249.8z"
+                        />
+                      </svg>
+                      <svg
+                        id="pwHide"
+                        class="hidden h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 640 512"
+                      >
+                        <path
+                          d="M636.1 497.7C640.4 500.5 641 505.5 638.3 508.1C635.5 512.4 630.5 513 627 510.3L3.022 14.26C-.4365 11.51-1.012 6.481 1.738 3.022C4.487-.4365 9.52-1.012 12.98 1.738L636.1 497.7zM605.5 268.3C595.9 291.3 579.5 321.1 556.5 351L543.1 341.1C566 312.4 581.7 283.1 590.8 262.2C592.4 258.2 592.4 253.8 590.8 249.8C576.7 215.1 546.6 166 501.7 124.3C456.6 82.41 395.6 47.1 319.1 47.1C277.9 47.1 240.3 58.69 207.4 75.4L193.7 64.55C229.9 44.92 272.2 31.1 320 31.1C400.8 31.1 465.5 68.84 512.6 112.6C559.4 156 590.7 207.1 605.5 243.7C608.8 251.6 608.8 260.4 605.5 268.3H605.5zM83.46 160.1L96.02 170.9C74 199.6 58.31 228 49.23 249.8C47.59 253.8 47.59 258.2 49.23 262.2C63.34 296 93.38 345.1 138.3 387.7C183.4 429.6 244.4 464 320 464C362.1 464 399.7 453.3 432.6 436.6L446.3 447.5C410.1 467.1 367.8 480 319.1 480C239.2 480 174.5 443.2 127.4 399.4C80.62 355.1 49.34 304 34.46 268.3C31.18 260.4 31.18 251.6 34.46 243.7C44.06 220.7 60.46 190.9 83.46 160.1H83.46zM208 259.4L225.5 273.1C233.6 317.1 272.8 352 320 352C321.8 352 323.5 351.1 325.2 351.9L342.7 365.7C335.4 367.2 327.8 368 320 368C259.3 368 209.8 319.7 208 259.4H208zM319.1 143.1C380.7 143.1 430.2 192.3 431.9 252.6L414.5 238.8C406.4 194 367.2 159.1 319.1 159.1C318.2 159.1 316.5 160 314.8 160.1L297.3 146.3C304.6 144.8 312.2 143.1 319.1 143.1L319.1 143.1z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <p class="mt-2 text-sm text-red-600" id="pwError"></p>
+                </div>
+
+                <div id="pwHintDiv" class="sm:col-span-6">
+                  <label for="pwHint">Password hint</label>
+                  <div class="my-1">
+                    <textarea
+                      class="input-border bg-gray-100 block w-full rounded-md text-sm resize-none"
+                      id="pwHint"
+                      name="pwHint"
+                      readonly
+                      rows="4"
+                      spellcheck="false"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-5 flex justify-end">
+                <button
+                  class="bg-emerald-700 hover:bg-emerald-800 disabled:bg-gray-600 text-white inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed"
+                  id="revealBtn"
+                  onclick="revealSecret(event)"
+                  type="submit"
+                >
+                  Reveal secret
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <label for="message">Result</label>
+        <div class="my-1">
+          <textarea
+            class="input-border bg-gray-100 block w-full rounded-md text-sm resize-none"
+            id="message"
+            name="message"
+            readonly
+            rows="4"
+            spellcheck="false"
+          ></textarea>
+          <img
+            alt="Revealed image"
+            class="hidden max-h-96 mb-4 rounded-md"
+            id="img"
+          />
+          <a
+            class="flex items-center text-sm font-medium text-gray-800 transition hover:text-emerald-600"
+            download="privacyprotect.html"
+            href="#"
+            id="file"
+          >
+            <button
+              class="hidden bg-emerald-700 hover:bg-emerald-800 disabled:bg-gray-600 text-white inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed"
+              id="saveBtn"
+            ></button
+          ></a>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

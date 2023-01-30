@@ -1,0 +1,12 @@
+<script lang="ts">
+  import Eye from "$icons/eye-thin.svg?component";
+  import EyeSlash from "$icons/eye-slash-thin.svg?component";
+  import Trail from "$components/inputs/Trail.svelte";
+
+  export let showPassword = false;
+</script>
+
+<Trail on:click>
+  <Eye class={`h-4 w-4 ${showPassword ? "hidden" : ""}`} />
+  <EyeSlash class={`h-4 w-4 ${showPassword ? "" : "hidden"}`} />
+</Trail>

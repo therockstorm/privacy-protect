@@ -1,0 +1,31 @@
+{
+  "cSpell.words": [
+    "Ahrefs",
+    "ciphertext",
+    "commitlint",
+    "emazzotta",
+    "fullscreen",
+    "geolocation",
+    "nosniff",
+    "OWASP",
+    "poppanator",
+    "privacyprotect",
+    "publickey",
+    "Qualys",
+    "SAMEORIGIN",
+    "sonarjs",
+    "sveltekit",
+    "tailwindcss",
+    "unpublish"
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.validate": ["typescript"],
+  "files.watcherExclude": {
+    "**/dist": true,
+    "**/cache": true,
+    "**/cdk.out": true,
+    "**/coverage": true,
+    "**/node_modules": true,
+    "**/tmp": true
+  }
+}

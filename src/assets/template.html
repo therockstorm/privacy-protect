@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="https://www.privacyprotect.dev/favicon.svg" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>PrivacyProtect - Reveal secret</title>
+    <style>
+      /*{.STYLES}*/
+    </style>
+    <script>
+      const CONFIG = `{.CONFIG}`;
+      const ELS = {
+        file: undefined,
+        img: undefined,
+        message: undefined,
+        pw: undefined,
+        pwError: undefined,
+        pwHint: undefined,
+        pwHintDiv: undefined,
+        pwShow: undefined,
+        pwHide: undefined,
+        revealBtn: undefined,
+        saveBtn: undefined,
+      };
+      const IMG_EXTS = ["jpg", "jpeg", "png", "gif", "webp"];
+      let showPassword = false;
+
+      function init() {
+        Object.keys(ELS).forEach((k) => {
+          ELS[k] = document.getElementById(k);
+        });
+
+        if (CONFIG.passwordHint) ELS.pwHint.innerHTML = CONFIG.passwordHint;
+        else ELS.pwHintDiv.classList.add("hidden");
+
+        ELS.pw.addEventListener("keyup", (event) => {
+          if (event.key === "Enter") revealSecret();
+        });
+        ELS.pw.addEventListener("input", (e) => {
+          inputError(ELS.pw, ELS.pwError, "");
+        });
+      }
+
+      function togglePwVisibility() {
+        showPassword = !showPassword;
+
+        if (showPassword) {
+          ELS.pw.type = "text";
+          ELS.pwShow.classList.add("hidden");
+          ELS.pwHide.classList.remove("hidden");
+        } else {
+          ELS.pw.type = "password";
+          ELS.pwShow.classList.remove("hidden");
+          ELS.pwHide.classList.add("hidden");
+        }
+      }
+
+      async function revealSecret(e) {
+        const pw = ELS.pw.value;
+        if (pw.length == 0) return;
+
+        e = e ?? window.event;
+        e.preventDefault();
+        let plainText;
+        try {
+          ELS.revealBtn.classList.add("animate-pulse");
+          const { aesGcm, cipher, iterations, keyLen, pbkdf2, hash } = CONFIG;
+          const salt = hexStringToBytes(CONFIG.salt);
+          const importedKey = await window.crypto.subtle.importKey(
+            "raw",
+            new TextEncoder().encode(pw),
+            { name: pbkdf2 },
+            false,
+            ["deriveKey"]
+          );
+          const derivedKey = await window.crypto.subtle.deriveKey(
+            { name: pbkdf2, salt, iterations: iterations, hash },
+            importedKey,
+            { name: aesGcm, length: keyLen * 8 },
+            false,
+            ["decrypt"]
+          );
+          plainText = await window.crypto.subtle.decrypt(
+            { name: aesGcm, iv: hexStringToBytes(CONFIG.iv) },
+            derivedKey,
+            hexStringToBytes(cipher)
+          );
+          ELS.pw.value = "";
+        } catch (error) {
+          inputError(ELS.pw, ELS.pwError, "Password invalid.");
+          return;
+        } finally {
+          ELS.revealBtn.classList.remove("animate-pulse");
+        }
+
+        const { fileExtension, secretType } = CONFIG;
+        if (secretType == "Message") {
+          const message = new TextDecoder().decode(plainText);
+          ELS.message.innerHTML = message;
+        } else if (secretType == "File") {
+          ELS.message.classList.add("hidden");
+          ELS.saveBtn.classList.remove("hidden");
+          const isImg = IMG_EXTS.includes(fileExtension);
+          const fileName = `privacyprotect.${fileExtension}`;
+          const b64 = btoa(
+            new Uint8Array(plainText).reduce(
+              (a, b) => a + String.fromCharCode(b),
+              ""
+            )
+          );
+          const file = isImg
+            ? `data:image/${fileExtension};base64,${b64}`
+            : `data:application/octet-stream;base64,${b64}`;
+          ELS.saveBtn.innerHTML = `Save ${fileName}`;
+          ELS.file.setAttribute("download", fileName);
+          ELS.file.setAttribute("href", file);
+          if (isImg) {
+            ELS.img.setAttribute("src", file);
+            ELS.img.classList.remove("hidden");
+          }
+        } else console.error(`Invalid secret type ${secretType}`);
+      }
+
+      function hexStringToBytes(hex) {
+        const bytes = [];
+        for (let c = 0; c < hex.length; c += 2) {
+          bytes.push(parseInt(hex.substring(c, c + 2), 16));
+        }
+        return Uint8Array.from(bytes);
+      }
+
+      function inputError(el, errorEl, error) {
+        errorEl.innerHTML = error;
+        el.classList.toggle("input-error", !!error);
+      }
+    </script>
+  </head>
+  <body onload="init()">
+    <div class="mx-auto my-6 max-w-3xl overflow-x-hidden px-6">
+      <header class="my-4">
+        <a href="https://www.privacyprotect.dev/">
+          <div class="flex gap-2 items-center">
+            <svg
+              class="h-10 w-10"
+              viewBox="0 0 512 512"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M280 258.4V328c0 13.25-10.75 24-24 24s-24-10.75-24-24V258.4C213.1 249.4 200 230.3 200 208c0-30.93 25.07-56 56-56s56 25.07 56 56C312 230.3 298.9 249.4 280 258.4z"
+              />
+              <path
+                d="M466.5 83.69l-192-80.01C269.6 1.656 261.3 0 256.1 0C250.8 0 242.5 1.656 237.6 3.688l-192 80.01C27.69 91.08 16 108.6 16 127.1C16 385.2 205.2 512 255.1 512C307.1 512 496 383.8 496 127.1C496 108.6 484.3 91.08 466.5 83.69zM280 258.4V328c0 13.25-10.75 24-24 24s-24-10.75-24-24V258.4C213.1 249.4 200 230.3 200 208c0-30.93 25.07-56 56-56s56 25.07 56 56C312 230.3 298.9 249.4 280 258.4z"
+                fill="#34d399"
+              />
+            </svg>
+            <h1 class="font-medium text-3xl">PrivacyProtect</h1>
+          </div>
+        </a>
+      </header>
+      <main>
+        <div class="mb-3 prose prose-emerald max-w-none">
+          <p>This page contains a secret, enter the password to reveal it.</p>
+          <p>
+            If a password hint is provided and you still cannot guess the
+            password, contact the sender.
+          </p>
+          <p>
+            The secret is safe; <strong>it never leaves your device</strong>. No
+            internet connection required.
+          </p>
+        </div>
+
+        <div class="overflow-hidden rounded-lg bg-gray-50 mb-4">
+          <div class="px-4 py-5">
+            <form>
+              <div class="grid grid-cols-1 gap-y-4 gap-x-4 sm:grid-cols-6">
+                <div class="sm:col-span-6">
+                  <label for="pw">Password</label>
+                  <div class="mt-1 flex rounded-md">
+                    <input
+                      autocomplete="on"
+                      autofocus
+                      class="input-border rounded-l-md flex-1 text-sm z-10"
+                      id="pw"
+                      name="pw"
+                      required
+                      spellcheck="false"
+                      type="password"
+                    />
+                    <button
+                      class="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus-within:z-10"
+                      onclick="togglePwVisibility(event)"
+                      type="button"
+                    >
+                      <svg
+                        id="pwShow"
+                        class="h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 576 512"
+                      >
+                        <path
+                          d="M400 256C400 317.9 349.9 368 288 368C226.1 368 176 317.9 176 256C176 194.1 226.1 144 288 144C349.9 144 400 194.1 400 256zM288 160C234.1 160 192 202.1 192 256C192 309 234.1 352 288 352C341 352 384 309 384 256C384 202.1 341 160 288 160zM480.6 112.6C527.4 156 558.7 207.1 573.5 243.7C576.8 251.6 576.8 260.4 573.5 268.3C558.7 304 527.4 355.1 480.6 399.4C433.5 443.2 368.8 480 288 480C207.2 480 142.5 443.2 95.42 399.4C48.62 355.1 17.34 304 2.461 268.3C-.8205 260.4-.8205 251.6 2.461 243.7C17.34 207.1 48.62 156 95.42 112.6C142.5 68.84 207.2 32 288 32C368.8 32 433.5 68.84 480.6 112.6V112.6zM17.23 249.8C15.59 253.8 15.59 258.2 17.23 262.2C31.34 296 61.38 345.1 106.3 387.7C151.4 429.6 212.4 464 288 464C363.6 464 424.6 429.6 469.7 387.7C514.6 345.1 544.7 296 558.8 262.2C560.4 258.2 560.4 253.8 558.8 249.8C544.7 215.1 514.6 166 469.7 124.3C424.6 82.41 363.6 48 288 48C212.4 48 151.4 82.41 106.3 124.3C61.38 166 31.34 215.1 17.23 249.8V249.8z"
+                        />
+                      </svg>
+                      <svg
+                        id="pwHide"
+                        class="hidden h-4 w-4"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 640 512"
+                      >
+                        <path
+                          d="M636.1 497.7C640.4 500.5 641 505.5 638.3 508.1C635.5 512.4 630.5 513 627 510.3L3.022 14.26C-.4365 11.51-1.012 6.481 1.738 3.022C4.487-.4365 9.52-1.012 12.98 1.738L636.1 497.7zM605.5 268.3C595.9 291.3 579.5 321.1 556.5 351L543.1 341.1C566 312.4 581.7 283.1 590.8 262.2C592.4 258.2 592.4 253.8 590.8 249.8C576.7 215.1 546.6 166 501.7 124.3C456.6 82.41 395.6 47.1 319.1 47.1C277.9 47.1 240.3 58.69 207.4 75.4L193.7 64.55C229.9 44.92 272.2 31.1 320 31.1C400.8 31.1 465.5 68.84 512.6 112.6C559.4 156 590.7 207.1 605.5 243.7C608.8 251.6 608.8 260.4 605.5 268.3H605.5zM83.46 160.1L96.02 170.9C74 199.6 58.31 228 49.23 249.8C47.59 253.8 47.59 258.2 49.23 262.2C63.34 296 93.38 345.1 138.3 387.7C183.4 429.6 244.4 464 320 464C362.1 464 399.7 453.3 432.6 436.6L446.3 447.5C410.1 467.1 367.8 480 319.1 480C239.2 480 174.5 443.2 127.4 399.4C80.62 355.1 49.34 304 34.46 268.3C31.18 260.4 31.18 251.6 34.46 243.7C44.06 220.7 60.46 190.9 83.46 160.1H83.46zM208 259.4L225.5 273.1C233.6 317.1 272.8 352 320 352C321.8 352 323.5 351.1 325.2 351.9L342.7 365.7C335.4 367.2 327.8 368 320 368C259.3 368 209.8 319.7 208 259.4H208zM319.1 143.1C380.7 143.1 430.2 192.3 431.9 252.6L414.5 238.8C406.4 194 367.2 159.1 319.1 159.1C318.2 159.1 316.5 160 314.8 160.1L297.3 146.3C304.6 144.8 312.2 143.1 319.1 143.1L319.1 143.1z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <p class="mt-2 text-sm text-red-600" id="pwError"></p>
+                </div>
+
+                <div id="pwHintDiv" class="sm:col-span-6">
+                  <label for="pwHint">Password hint</label>
+                  <div class="my-1">
+                    <textarea
+                      class="input-border bg-gray-100 block w-full rounded-md text-sm resize-none"
+                      id="pwHint"
+                      name="pwHint"
+                      readonly
+                      rows="4"
+                      spellcheck="false"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-5 flex justify-end">
+                <button
+                  class="bg-emerald-700 hover:bg-emerald-800 disabled:bg-gray-600 text-white inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed"
+                  id="revealBtn"
+                  onclick="revealSecret(event)"
+                  type="submit"
+                >
+                  Reveal secret
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <label for="message">Result</label>
+        <div class="my-1">
+          <textarea
+            class="input-border bg-gray-100 block w-full rounded-md text-sm resize-none"
+            id="message"
+            name="message"
+            readonly
+            rows="4"
+            spellcheck="false"
+          ></textarea>
+          <img
+            alt="Revealed image"
+            class="hidden max-h-96 mb-4 rounded-md"
+            id="img"
+          />
+          <a
+            class="flex items-center text-sm font-medium text-gray-800 transition hover:text-emerald-600"
+            download="privacyprotect.html"
+            href="#"
+            id="file"
+          >
+            <button
+              class="hidden bg-emerald-700 hover:bg-emerald-800 disabled:bg-gray-600 text-white inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 disabled:cursor-not-allowed"
+              id="saveBtn"
+            ></button
+          ></a>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

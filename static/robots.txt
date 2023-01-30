@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://www.privacyprotect.dev
+
+# Sitemaps
+#Sitemap: https://www.privacyprotect.dev/sitemap.xml
