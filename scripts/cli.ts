@@ -4,7 +4,11 @@ import { promises as fs } from "fs";
 
 import { toUint8Array } from "../src/lib/client/to-array.js";
 import { decrypt } from "../src/lib/decrypt.js";
-import { encrypt, ENCRYPTION_CONFIG } from "../src/lib/encrypt.js";
+import {
+  encrypt,
+  encryptBySecretType,
+  ENCRYPTION_CONFIG,
+} from "../src/lib/encrypt.js";
 
 const OPTS = {
   help: ["--help", "-h"],
@@ -50,11 +54,12 @@ async function cli() {
     const { keyLen } = ENCRYPTION_CONFIG;
     const [iv, salt] = [cryptoRandom(keyLen), cryptoRandom(keyLen)];
     const req = { iv, password, salt, subtle };
-    const cipherText = await encrypt({
+    const cipherText = await encryptBySecretType({
       ...req,
       plainText: isFile
         ? await fs.readFile(fileOrMessage)
         : toUint8Array(fileOrMessage),
+      secretType: isFile ? "File" : "Message",
     });
     const plainText = await decrypt({ ...req, cipherText });
 

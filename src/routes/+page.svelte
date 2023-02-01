@@ -7,30 +7,28 @@
   import PasswordTrail from "$components/inputs/PasswordTrail.svelte";
   import Prose from "$components/Prose.svelte";
   import Well from "$components/Well.svelte";
-  import { bytesToHexStr, encrypt, ENCRYPTION_CONFIG } from "$lib/encrypt";
+  import {
+    encryptBySecretType,
+    ENCRYPTION_CONFIG,
+    secretTypes,
+    SECRET_TYPES,
+  } from "$lib/encrypt";
   import { SITE_TITLE, SITE_URL } from "$lib/client/seo";
   import { toUint8Array } from "$lib/client/to-array";
 
-  import templateHtml from "../assets/template.html?raw";
-  import templateStyle from "../assets/style.css?raw";
-  import { cryptoRandom } from "$lib/client/crypto";
+  import {
+    MAX_FILE_SIZE_MB,
+    validateFiles,
+    validateMessage,
+    validatePassword,
+  } from "$lib/validate";
+  import { random } from "$lib/client/crypto";
+  import { templateSecret } from "$lib/template-secret";
 
-  const MAX_FILE_SIZE_MB = 100;
-  const SECRET_TYPES = { message: "Message", file: "File" } as const;
-  const secretTypes = Object.values(SECRET_TYPES);
   const title = "Securely share and store passwords and sensitive files.";
   const fullTitle = `${SITE_TITLE} - ${title}`;
   const desc =
     "Securely share secrets and WiFi passwords over text messages, send end-to-end encrypted emails, or store password-protected files on USB and cloud drives.";
-
-  type ValidateInputReq<T> = Readonly<{
-    lenient: boolean;
-    match: boolean;
-    name: string;
-    val?: null | Readonly<{ length: number; [k: number]: T }>;
-  }>;
-
-  type Validator<T> = Pick<ValidateInputReq<T>, "lenient" | "val">;
 
   type Validated = Readonly<{
     fileExtension?: string;
@@ -48,10 +46,18 @@
   let showPassword = false;
   let loading = false;
 
-  $: passwordError = validatePassword({ lenient: true, val: password });
+  $: passwordError = validatePassword({
+    lenient: true,
+    secretType,
+    val: password,
+  });
   $: passwordType = showPassword ? "text" : "password";
-  $: messageError = validateMessage({ lenient: true, val: message });
-  $: fileError = validateFiles({ lenient: true, val: files });
+  $: messageError = validateMessage({
+    lenient: true,
+    secretType,
+    val: message,
+  });
+  $: fileError = validateFiles({ lenient: true, secretType, val: files });
 
   async function concealSecret(e: MouseEvent) {
     const validated = await validateForm();
@@ -60,20 +66,14 @@
     e.preventDefault();
     loading = true;
 
-    downloadHtml(
-      templateHtml
-        .replace(`    <link rel="stylesheet" href="./style.css" />`, "")
-        .replace(
-          "`{.CONFIG}`",
-          JSON.stringify({
-            ...ENCRYPTION_CONFIG,
-            ...(await encryptBySecretType(validated)),
-            passwordHint: passwordHint ?? "No hint provided.",
-            secretType,
-          })
-        )
-        .replace("/*{.STYLES}*/", templateStyle)
-    );
+    const { keyLen } = ENCRYPTION_CONFIG;
+    const args = { iv: random(keyLen), salt: random(keyLen), secretType };
+    const encryptRes = await encryptBySecretType({
+      ...validated,
+      ...args,
+      subtle: window.crypto.subtle,
+    });
+    downloadHtml(templateSecret({ ...encryptRes, ...args, passwordHint }));
 
     loading = false;
     resetInputs();
@@ -81,9 +81,9 @@
 
   async function validateForm(): Promise<ValidateFormRes> {
     const lenient = false;
-    passwordError = validatePassword({ lenient, val: password });
-    messageError = validateMessage({ lenient, val: message });
-    fileError = validateFiles({ lenient, val: files });
+    passwordError = validatePassword({ lenient, secretType, val: password });
+    messageError = validateMessage({ lenient, secretType, val: message });
+    fileError = validateFiles({ lenient, secretType, val: files });
     if (passwordError || fileError || messageError) return false;
 
     password = password ?? "";
@@ -94,58 +94,6 @@
           plainText: await files[0].arrayBuffer(),
         }
       : { password, plainText: toUint8Array(message) };
-  }
-
-  async function encryptBySecretType(req: Validated) {
-    const { keyLen } = ENCRYPTION_CONFIG;
-    const [iv, salt] = [cryptoRandom(keyLen), cryptoRandom(keyLen)];
-    const subtle = window.crypto.subtle;
-    const cipher = await encrypt({ ...req, iv, salt, subtle });
-    const [i, s, c] = [iv, salt, cipher].map((b) => bytesToHexStr(b));
-    const res = { iv: i, cipher: c, salt: s };
-
-    return secretType === SECRET_TYPES.file && files != null
-      ? { ...res, fileExtension: files[0].name.split(".").pop() }
-      : res;
-  }
-
-  function validatePassword({ lenient, val }: Validator<string>) {
-    return validateInput({ lenient, match: true, name: "Password", val });
-  }
-
-  function validateMessage({ lenient, val }: Validator<string>) {
-    return validateInput({
-      lenient,
-      match: secretType === SECRET_TYPES.message,
-      name: "Message",
-      val,
-    });
-  }
-
-  function validateFiles({ lenient, val }: Validator<File>) {
-    const name = "File";
-    const res = validateInput({
-      lenient,
-      match: secretType === SECRET_TYPES.file,
-      name,
-      val,
-    });
-    if (res) return res;
-
-    const sizeMb = val != null && val[0].size / 1024 / 1024;
-    return sizeMb > MAX_FILE_SIZE_MB
-      ? `${name} larger than ${MAX_FILE_SIZE_MB}MB limit.`
-      : undefined;
-  }
-
-  function validateInput<T>({
-    lenient,
-    name,
-    match,
-    val,
-  }: ValidateInputReq<T>) {
-    if (!match || (lenient && val == null)) return undefined;
-    return val == null || val.length < 1 ? `${name} required.` : undefined;
   }
 
   function downloadHtml(secretHtml: string) {
