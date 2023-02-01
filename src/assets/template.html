@@ -76,7 +76,7 @@
             ["deriveKey"]
           );
           const derivedKey = await window.crypto.subtle.deriveKey(
-            { name: pbkdf2, salt, iterations: iterations, hash },
+            { name: pbkdf2, salt, iterations, hash },
             importedKey,
             { name: aesGcm, length: keyLen * 8 },
             false,

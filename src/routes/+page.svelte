@@ -7,12 +7,13 @@
   import PasswordTrail from "$components/inputs/PasswordTrail.svelte";
   import Prose from "$components/Prose.svelte";
   import Well from "$components/Well.svelte";
-  import { encrypt, ENCRYPTION_CONFIG } from "$lib/client/encrypt";
+  import { bytesToHexStr, encrypt, ENCRYPTION_CONFIG } from "$lib/encrypt";
   import { SITE_TITLE, SITE_URL } from "$lib/client/seo";
   import { toUint8Array } from "$lib/client/to-array";
 
   import templateHtml from "../assets/template.html?raw";
   import templateStyle from "../assets/style.css?raw";
+  import { cryptoRandom } from "$lib/client/crypto";
 
   const MAX_FILE_SIZE_MB = 100;
   const SECRET_TYPES = { message: "Message", file: "File" } as const;
@@ -107,14 +108,17 @@
       : { password, plainText: toUint8Array(message) };
   }
 
-  async function encryptBySecretType({ password, plainText }: Validated) {
-    if (secretType === SECRET_TYPES.file && files != null) {
-      const file = files[0];
-      return {
-        ...(await encrypt({ password, plainText })),
-        fileExtension: file.name.split(".").pop(),
-      };
-    } else return encrypt({ password, plainText });
+  async function encryptBySecretType(req: Validated) {
+    const { keyLen } = ENCRYPTION_CONFIG;
+    const [iv, salt] = [cryptoRandom(keyLen), cryptoRandom(keyLen)];
+    const subtle = window.crypto.subtle;
+    const cipher = await encrypt({ ...req, iv, salt, subtle });
+    const [i, s, c] = [iv, salt, cipher].map((b) => bytesToHexStr(b));
+    const res = { iv: i, cipher: c, salt: s };
+
+    return secretType === SECRET_TYPES.file && files != null
+      ? { ...res, fileExtension: files[0].name.split(".").pop() }
+      : res;
   }
 
   function validatePassword({ lenient, val }: Validator<string>) {
