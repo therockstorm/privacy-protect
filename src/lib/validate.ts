@@ -7,7 +7,7 @@ type ValidateInputReq<T> = Readonly<{
   match: boolean;
   name: string;
   secretType: Secret;
-  val?: null | Readonly<{ length: number; [k: number]: T }>;
+  val?: null | Readonly<{ [k: number]: T; length: number }>;
 }>;
 
 export type Validator<T> = Pick<

@@ -127,7 +127,7 @@ function parse() {
       allowPositionals: true,
       args: process.argv.slice(2),
       options: {
-        help: { type: "boolean", short: "h" },
+        help: { short: "h", type: "boolean" },
         hint: { type: "string" },
       },
     });

@@ -2,12 +2,13 @@ import { toUint8Array } from "./client/to-array.js";
 
 export const ENCRYPTION_CONFIG = {
   aesGcm: "AES-GCM",
+  hash: "SHA-512",
   iterations: 2_100_000,
   keyLen: 32,
   pbkdf2: "PBKDF2",
-  hash: "SHA-512",
 };
 
+// eslint-disable-next-line sort-keys
 export const SECRET_TYPES = { message: "Message", file: "File" } as const;
 export const secretTypes = Object.values(SECRET_TYPES);
 export type Secret = (typeof secretTypes)[number];
@@ -44,9 +45,9 @@ export async function encryptBySecretType(
 async function encrypt({ iv, password, plainText, salt, subtle }: EncryptReq) {
   const { aesGcm, iterations, keyLen, pbkdf2, hash } = ENCRYPTION_CONFIG;
   return subtle.encrypt(
-    { name: aesGcm, iv },
+    { iv, name: aesGcm },
     await subtle.deriveKey(
-      { name: pbkdf2, salt, iterations, hash },
+      { hash, iterations, name: pbkdf2, salt },
       await subtle.importKey(
         "raw",
         toUint8Array(password),
@@ -54,7 +55,7 @@ async function encrypt({ iv, password, plainText, salt, subtle }: EncryptReq) {
         false,
         ["deriveKey"]
       ),
-      { name: aesGcm, length: keyLen * 8 },
+      { length: keyLen * 8, name: aesGcm },
       false,
       ["encrypt"]
     ),

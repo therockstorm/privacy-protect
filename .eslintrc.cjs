@@ -4,12 +4,19 @@ module.exports = {
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "plugin:sonarjs/recommended",
+    "plugin:typescript-sort-keys/recommended",
     "prettier",
   ],
   ignorePatterns: ["*.cjs"],
   parser: "@typescript-eslint/parser",
   parserOptions: { ecmaVersion: 2020, sourceType: "module" },
-  plugins: ["@typescript-eslint", "svelte3", "simple-import-sort", "sonarjs"],
+  plugins: [
+    "@typescript-eslint",
+    "svelte3",
+    "simple-import-sort",
+    "sonarjs",
+    "typescript-sort-keys",
+  ],
   overrides: [{ files: ["*.svelte"], processor: "svelte3/svelte3" }],
   root: true,
   rules: {
@@ -17,6 +24,7 @@ module.exports = {
     "no-return-await": "warn",
     "require-await": "warn",
     "simple-import-sort/imports": "warn",
+    "sort-keys": "warn",
   },
   settings: { "svelte3/typescript": () => require("typescript") },
 };

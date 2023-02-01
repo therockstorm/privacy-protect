@@ -2,30 +2,30 @@
   import Button from "$components/Button.svelte";
   import FileUpload from "$components/inputs/FileUpload.svelte";
   import Input from "$components/inputs/Input.svelte";
+  import PasswordTrail from "$components/inputs/PasswordTrail.svelte";
   import RadioGroup from "$components/inputs/RadioGroup.svelte";
   import TextArea from "$components/inputs/TextArea.svelte";
-  import PasswordTrail from "$components/inputs/PasswordTrail.svelte";
   import Prose from "$components/Prose.svelte";
   import Well from "$components/Well.svelte";
+  import { random } from "$lib/client/crypto";
+  import { SITE_TITLE, SITE_URL } from "$lib/client/seo";
+  import { toUint8Array } from "$lib/client/to-array";
   import {
     encryptBySecretType,
     ENCRYPTION_CONFIG,
-    secretTypes,
     SECRET_TYPES,
+    secretTypes,
   } from "$lib/encrypt";
-  import { SITE_TITLE, SITE_URL } from "$lib/client/seo";
-  import { toUint8Array } from "$lib/client/to-array";
-  import css from "../assets/style.css?raw";
-  import html from "../assets/template.html?raw";
-
+  import { SECRET_HTML_FILE_NAME, templateSecret } from "$lib/template-secret";
   import {
     MAX_FILE_SIZE_MB,
     validateFiles,
     validateMessage,
     validatePassword,
   } from "$lib/validate";
-  import { random } from "$lib/client/crypto";
-  import { SECRET_HTML_FILE_NAME, templateSecret } from "$lib/template-secret";
+
+  import css from "../assets/style.css?raw";
+  import html from "../assets/template.html?raw";
 
   const title = "Securely share and store passwords and sensitive files.";
   const fullTitle = `${SITE_TITLE} - ${title}`;

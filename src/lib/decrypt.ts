@@ -15,7 +15,7 @@ export async function decrypt({
   salt,
   subtle,
 }: DecryptReq): Promise<ArrayBuffer> {
-  const { aesGcm, iterations, keyLen, pbkdf2, hash } = ENCRYPTION_CONFIG;
+  const { aesGcm, hash, iterations, keyLen, pbkdf2 } = ENCRYPTION_CONFIG;
   const importedKey = await subtle.importKey(
     "raw",
     new TextEncoder().encode(password),
@@ -25,15 +25,15 @@ export async function decrypt({
   );
   const derivedKey = await subtle.deriveKey(
     {
+      hash,
+      iterations,
       name: pbkdf2,
       salt,
-      iterations,
-      hash,
     },
     importedKey,
-    { name: aesGcm, length: keyLen * 8 },
+    { length: keyLen * 8, name: aesGcm },
     false,
     ["decrypt"]
   );
-  return subtle.decrypt({ name: aesGcm, iv }, derivedKey, cipherText);
+  return subtle.decrypt({ iv, name: aesGcm }, derivedKey, cipherText);
 }
