@@ -15,6 +15,8 @@
   } from "$lib/encrypt";
   import { SITE_TITLE, SITE_URL } from "$lib/client/seo";
   import { toUint8Array } from "$lib/client/to-array";
+  import css from "../assets/style.css?raw";
+  import html from "../assets/template.html?raw";
 
   import {
     MAX_FILE_SIZE_MB,
@@ -23,7 +25,7 @@
     validatePassword,
   } from "$lib/validate";
   import { random } from "$lib/client/crypto";
-  import { templateSecret } from "$lib/template-secret";
+  import { SECRET_HTML_FILE_NAME, templateSecret } from "$lib/template-secret";
 
   const title = "Securely share and store passwords and sensitive files.";
   const fullTitle = `${SITE_TITLE} - ${title}`;
@@ -73,7 +75,9 @@
       ...args,
       subtle: window.crypto.subtle,
     });
-    downloadHtml(templateSecret({ ...encryptRes, ...args, passwordHint }));
+    downloadHtml(
+      templateSecret({ ...encryptRes, ...args, css, html, passwordHint })
+    );
 
     loading = false;
     resetInputs();
@@ -99,7 +103,7 @@
   function downloadHtml(secretHtml: string) {
     const blob = new Blob([secretHtml], { type: "text/html" });
     const downloadA = document.createElement("a");
-    downloadA.setAttribute("download", "privacyprotect.secret.html");
+    downloadA.setAttribute("download", SECRET_HTML_FILE_NAME);
     downloadA.setAttribute("href", window.URL.createObjectURL(blob));
     document.body.appendChild(downloadA);
     downloadA.click();

@@ -14,7 +14,7 @@ export async function decrypt({
   password,
   salt,
   subtle,
-}: DecryptReq) {
+}: DecryptReq): Promise<ArrayBuffer> {
   const { aesGcm, iterations, keyLen, pbkdf2, hash } = ENCRYPTION_CONFIG;
   const importedKey = await subtle.importKey(
     "raw",

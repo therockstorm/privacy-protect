@@ -15,11 +15,11 @@ export type Validator<T> = Pick<
   "lenient" | "secretType" | "val"
 >;
 
-export function validatePassword(req: Validator<string>) {
+export function validatePassword(req: Validator<string>): string | undefined {
   return validateInput({ ...req, match: true, name: "Password" });
 }
 
-export function validateMessage(req: Validator<string>) {
+export function validateMessage(req: Validator<string>): string | undefined {
   return validateInput({
     ...req,
     match: req.secretType === SECRET_TYPES.message,
@@ -27,7 +27,7 @@ export function validateMessage(req: Validator<string>) {
   });
 }
 
-export function validateFiles(req: Validator<File>) {
+export function validateFiles(req: Validator<File>): string | undefined {
   const name = "File";
   const res = validateInput({
     ...req,

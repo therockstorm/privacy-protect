@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Eye from "$icons/eye-thin.svg?component";
   import EyeSlash from "$icons/eye-slash-thin.svg?component";
+  import Eye from "$icons/eye-thin.svg?component";
   import Trail from "$components/inputs/Trail.svelte";
 
   export let showPassword = false;
