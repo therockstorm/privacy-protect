@@ -1,6 +1,7 @@
 import { subtle, webcrypto } from "crypto";
 import { promises as fs, writeFileSync } from "fs";
 import { dirname, join } from "path";
+import readline from "readline";
 import { fileURLToPath } from "url";
 import { parseArgs } from "util";
 
@@ -24,7 +25,7 @@ const ASSET_DIR = join(
 
 const USAGE = {
   encrypt: `
-Usage: npm run pp -- encrypt [OPTIONS] [FILE_PATH_OR_MESSAGE] [PASSWORD] [OUT_DIR]
+Usage: npm run pp -- encrypt [OPTIONS] [FILE_PATH_OR_MESSAGE] [OUT_DIR]
 
 Encrypt a file or message.
 
@@ -46,23 +47,20 @@ Commands:
 async function cli() {
   const { positionals, values } = parse();
 
-  if (positionals.length === 0 && values.help) {
-    console.log(USAGE.global);
-    return;
-  }
-
-  if (positionals[0] === "encrypt") {
-    if (positionals.length < 4 || values.help) {
+  if (positionals.length === 0 && values.help) console.log(USAGE.global);
+  else if (positionals[0] === "encrypt") {
+    if (positionals.length < 3 || values.help) {
       console.log(USAGE.encrypt);
       return;
     }
 
-    const [, fileOrMessage, password, out] = positionals;
+    const [, fileOrMessage, out] = positionals;
     if (!dirExists(out)) {
       console.error(`Output '${out}' does not exist or is not a directory.`);
       return;
     }
 
+    const password = await hiddenQuestion("Password: ");
     const isFile = await fileExists(fileOrMessage);
     const secretType: Secret = isFile ? "File" : "Message";
     const { keyLen } = ENCRYPTION_CONFIG;
@@ -95,10 +93,32 @@ async function cli() {
     });
 
     writeFileSync(join(out, SECRET_HTML_FILE_NAME), template);
-    return;
-  }
+  } else console.log(USAGE.global);
+}
 
-  console.log(USAGE.global);
+function hiddenQuestion(query: string): Promise<string> {
+  return new Promise((resolve) => {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+    const stdin = process.openStdin();
+    process.stdin.on("data", (char) => {
+      switch (char.toString()) {
+        case "\n":
+        case "\r":
+        case "\u0004":
+          stdin.pause();
+          break;
+        default:
+          process.stdout.clearLine(0);
+          readline.cursorTo(process.stdout, 0);
+          process.stdout.write(query + Array(rl.line.length + 1).join("*"));
+          break;
+      }
+    });
+    rl.question(query, resolve);
+  });
 }
 
 function parse() {
