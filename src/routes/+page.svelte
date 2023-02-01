@@ -45,7 +45,6 @@
   let secretType = secretTypes[0];
   let message: string | undefined;
   let files: FileList | undefined;
-  let dataUri: string | undefined;
   let showPassword = false;
   let loading = false;
 
@@ -61,33 +60,22 @@
     e.preventDefault();
     loading = true;
 
-    // Clear from previous download
-    dataUri = undefined;
-    dataUri =
-      "data:application/octet-stream;base64," +
-      btoa(
-        templateHtml
-          .replace(`    <link rel="stylesheet" href="./style.css" />`, "")
-          .replace(
-            "`{.CONFIG}`",
-            JSON.stringify({
-              ...ENCRYPTION_CONFIG,
-              ...(await encryptBySecretType(validated)),
-              passwordHint: passwordHint ?? "No hint provided.",
-              secretType,
-            })
-          )
-          .replace("/*{.STYLES}*/", templateStyle)
-      );
-    const downloadA = document.createElement("a");
-    downloadA.setAttribute("download", "privacyprotect.secret.html");
-    downloadA.setAttribute("href", dataUri);
-    document.body.appendChild(downloadA);
-    downloadA.click();
-    document.body.removeChild(downloadA);
+    downloadHtml(
+      templateHtml
+        .replace(`    <link rel="stylesheet" href="./style.css" />`, "")
+        .replace(
+          "`{.CONFIG}`",
+          JSON.stringify({
+            ...ENCRYPTION_CONFIG,
+            ...(await encryptBySecretType(validated)),
+            passwordHint: passwordHint ?? "No hint provided.",
+            secretType,
+          })
+        )
+        .replace("/*{.STYLES}*/", templateStyle)
+    );
 
     loading = false;
-
     resetInputs();
   }
 
@@ -158,6 +146,16 @@
   }: ValidateInputReq<T>) {
     if (!match || (lenient && val == null)) return undefined;
     return val == null || val.length < 1 ? `${name} required.` : undefined;
+  }
+
+  function downloadHtml(secretHtml: string) {
+    const blob = new Blob([secretHtml], { type: "text/html" });
+    const downloadA = document.createElement("a");
+    downloadA.setAttribute("download", "privacyprotect.secret.html");
+    downloadA.setAttribute("href", window.URL.createObjectURL(blob));
+    document.body.appendChild(downloadA);
+    downloadA.click();
+    document.body.removeChild(downloadA);
   }
 
   function resetInputs() {
