@@ -5,3 +5,5 @@ export const ENCRYPTION_CONFIG = {
   keyLen: 32,
   pbkdf2: "PBKDF2",
 } as const;
+
+export type EncryptionConfig = typeof ENCRYPTION_CONFIG;

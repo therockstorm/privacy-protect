@@ -64,6 +64,7 @@ export async function revealSecret(e?: Event) {
     setLoading(true);
     const params = [CONFIG.cipher, CONFIG.iv, CONFIG.salt].map(hexStrToBytes);
     plainText = await decrypt({
+      ...CONFIG,
       cipherText: params[0],
       iv: params[1],
       password: pw,

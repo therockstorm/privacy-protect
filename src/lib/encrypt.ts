@@ -1,8 +1,6 @@
 import { ENCRYPTION_CONFIG } from "./constants.js";
 import { toUint8Array } from "./to-array.js";
 
-export type EncryptionConfig = typeof ENCRYPTION_CONFIG;
-
 // eslint-disable-next-line sort-keys
 export const SECRET_TYPES = { message: "Message", file: "File" } as const;
 export const secretTypes = Object.values(SECRET_TYPES);

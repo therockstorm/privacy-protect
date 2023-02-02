@@ -1,6 +1,6 @@
 import { bytesToHexStr } from "./bytes-to-hex.js";
-import { ENCRYPTION_CONFIG } from "./constants.js";
-import type { EncryptionConfig, Secret } from "./encrypt.js";
+import { ENCRYPTION_CONFIG, type EncryptionConfig } from "./constants.js";
+import type { Secret } from "./encrypt.js";
 
 export const SECRET_HTML_FILE_NAME = "privacyprotect.secret.html";
 
