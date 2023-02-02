@@ -46,6 +46,19 @@ npm run dev -- --open
 npm run watch:template
 ```
 
+### CLI
+
+```bash
+# Show global help
+nr pp -h
+
+# Show help for a command (e.g. encrypt)
+nr pp -- encrypt -h
+
+# Encrypt a file with optional hint (it prompts for password)
+nr pp -- encrypt -m "My secret" --hint "My hint" ./output
+```
+
 ## Changelog
 
 See [CHANGELOG.md](./CHANGELOG.md).
