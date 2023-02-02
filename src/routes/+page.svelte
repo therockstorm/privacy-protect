@@ -15,7 +15,7 @@
   import { SECRET_HTML_FILE_NAME, templateSecret } from "$lib/template-secret";
   import {
     MAX_FILE_SIZE_MB,
-    validateFiles,
+    validateFile,
     validateMessage,
     validatePassword,
   } from "$lib/validate";
@@ -56,7 +56,14 @@
     secretType,
     val: message,
   });
-  $: fileError = validateFiles({ lenient: true, secretType, val: files });
+  $: fileError = validateFile({
+    lenient: true,
+    secretType,
+    val:
+      files != null
+        ? { path: files[0].name, size: files[0].size }
+        : { size: 0 },
+  });
 
   async function concealSecret(e: MouseEvent) {
     const validated = await validateForm();
@@ -82,10 +89,17 @@
 
   async function validateForm(): Promise<ValidateFormRes> {
     const lenient = false;
-    passwordError = validatePassword({ lenient, secretType, val: password });
+    fileError = validateFile({
+      lenient,
+      secretType,
+      val:
+        files != null
+          ? { path: files[0].name, size: files[0].size }
+          : { size: 0 },
+    });
     messageError = validateMessage({ lenient, secretType, val: message });
-    fileError = validateFiles({ lenient, secretType, val: files });
-    if (passwordError || fileError || messageError) return false;
+    passwordError = validatePassword({ lenient, secretType, val: password });
+    if (fileError || messageError || passwordError) return false;
 
     password = password ?? "";
     return secretType === SECRET_TYPES.file && files != null

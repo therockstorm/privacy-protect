@@ -7,11 +7,20 @@ import { parseArgs } from "util";
 
 import { toUint8Array } from "../src/lib/client/to-array.js";
 import { ENCRYPTION_CONFIG } from "../src/lib/constants.js";
-import { encryptBySecretType, type Secret } from "../src/lib/encrypt.js";
+import {
+  encryptBySecretType,
+  type Secret,
+  SECRET_TYPES,
+} from "../src/lib/encrypt.js";
 import {
   SECRET_HTML_FILE_NAME,
   templateSecret,
 } from "../src/lib/template-secret.js";
+import {
+  validateFile,
+  validateMessage,
+  validatePassword,
+} from "../src/lib/validate.js";
 
 const ASSET_DIR = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -22,76 +31,123 @@ const ASSET_DIR = join(
 
 const USAGE = {
   encrypt: `
-Usage: npm run pp -- encrypt [OPTIONS] [FILE_PATH_OR_MESSAGE] [OUT_DIR]
+Usage: npm run pp -- encrypt [OPTIONS] [--file OR --message] [OUT_DIR]
 
 Encrypt a file or message.
 
 Options:
   --help, -h      Print usage.
+
+  --file, -f      Secret file to conceal.
+  --hint          Password hint.
+  --message, -m   Secret message to conceal.
 `,
   global: `
 Usage: npm run pp -- [OPTIONS] [COMMAND] [ARG...]
 
 Options:
   --help, -h      Print usage.
-  --hint          Password hint.
 
 Commands:
   encrypt         Encrypt a file or message.
 `,
 };
 
+type ValidateReq = Readonly<{
+  file?: string;
+  message?: string;
+  out: string;
+  secretType: Secret;
+}>;
+
 async function cli() {
   const { positionals, values } = parse();
 
   if (positionals.length === 0 && values.help) console.log(USAGE.global);
   else if (positionals[0] === "encrypt") {
-    if (positionals.length < 3 || values.help) {
+    if (positionals.length < 2 || values.help) {
       console.log(USAGE.encrypt);
       return;
     }
 
-    const [, fileOrMessage, out] = positionals;
-    if (!dirExists(out)) {
-      console.error(`Output '${out}' does not exist or is not a directory.`);
+    const [, out] = positionals;
+    const { file, message, hint } = values;
+    const secretType: Secret = file ? "File" : "Message";
+    const validated = await validate({ file, message, out, secretType });
+    if (typeof validated === "string") {
+      console.error(validated);
       return;
     }
-
-    const password = await hiddenQuestion("Password: ");
-    const isFile = await fileExists(fileOrMessage);
-    const secretType: Secret = isFile ? "File" : "Message";
-    const { keyLen } = ENCRYPTION_CONFIG;
-    const args = {
-      iv: random(keyLen),
-      salt: random(keyLen),
-      secretType,
-      subtle,
-    };
-    const encryptRes = await encryptBySecretType({
-      ...args,
-      fileExtension: isFile ? fileOrMessage.split(".").pop() : undefined,
-      password,
-      plainText: isFile
-        ? await fs.readFile(fileOrMessage)
-        : toUint8Array(fileOrMessage),
-    });
 
     const [css, html, js] = await Promise.all(
       ["template.css", "template.html", "template.js"].map((asset) =>
         fs.readFile(join(ASSET_DIR, asset), "utf-8")
       )
     );
-    const template = templateSecret({
-      ...encryptRes,
-      ...args,
-      css,
-      html,
-      js,
-      passwordHint: values.hint,
-    });
+    const { keyLen } = ENCRYPTION_CONFIG;
+    const [iv, salt] = [random(keyLen), random(keyLen)];
+    const args = { iv, salt, secretType, subtle };
 
-    writeFileSync(join(out, SECRET_HTML_FILE_NAME), template);
+    const encryptRes = await encryptBySecretType({ ...args, ...validated });
+
+    writeFileSync(
+      join(out, SECRET_HTML_FILE_NAME),
+      templateSecret({
+        ...encryptRes,
+        ...args,
+        css,
+        html,
+        js,
+        passwordHint: hint,
+      })
+    );
   } else console.log(USAGE.global);
+}
+
+async function validate({ file, message, out, secretType }: ValidateReq) {
+  const errors: (string | undefined)[] = [];
+  const lenient = false;
+  if (!dirExists(out)) {
+    errors.push(`Output '${out}' not found or is not a directory.`);
+  }
+  if ((!file && !message) || (file && message)) {
+    errors.push(`Either --file or --message required, but not both.`);
+  }
+
+  if (file) {
+    try {
+      errors.push(
+        validateFile({
+          lenient,
+          secretType,
+          val: { path: file, size: (await fs.lstat(file)).size },
+        })
+      );
+    } catch (error) {
+      errors.push(`File '${file}' not found.`);
+    }
+  } else {
+    errors.push(validateMessage({ lenient, secretType, val: message }));
+  }
+
+  const error = errors.filter((error) => error != null).join("\n");
+  if (error) return error;
+
+  const password = await hiddenQuestion("Password: ");
+  const passwordError = validatePassword({
+    lenient,
+    secretType,
+    val: password,
+  });
+  if (passwordError) return passwordError;
+
+  return secretType === SECRET_TYPES.file && file != null
+    ? {
+        fileExtension: file.split(".").pop(),
+        password,
+        plainText: await fs.readFile(file),
+      }
+    : { password, plainText: toUint8Array(message) };
 }
 
 function hiddenQuestion(query: string): Promise<string> {
@@ -125,21 +181,15 @@ function parse() {
       allowPositionals: true,
       args: process.argv.slice(2),
       options: {
+        file: { short: "f", type: "string" },
         help: { short: "h", type: "boolean" },
         hint: { type: "string" },
+        message: { short: "m", type: "string" },
       },
     });
   } catch (error) {
     console.log(USAGE.encrypt);
     process.exit(1);
-  }
-}
-
-async function fileExists(path: string): Promise<boolean> {
-  try {
-    return (await fs.lstat(path)).isFile();
-  } catch {
-    return false;
   }
 }
 
