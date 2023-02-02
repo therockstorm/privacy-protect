@@ -30,17 +30,13 @@ export function validateMessage(req: Validator<string>): string | undefined {
 export function validateFile(
   req: Validator<Readonly<{ path?: string; size: number }>>
 ): string | undefined {
+  const match = req.secretType === SECRET_TYPES.file;
   const name = "File";
-  const res = validateInput({
-    ...req,
-    match: req.secretType === SECRET_TYPES.file,
-    name,
-    val: req.val?.path,
-  });
+  const res = validateInput({ ...req, match, name, val: req.val?.path });
   if (res) return res;
 
   const sizeMb = req.val != null && req.val.size / 1024 / 1024;
-  if (sizeMb <= 0 && !req.lenient) return `${name} required.`;
+  if (match && sizeMb <= 0 && !req.lenient) return `${name} required.`;
 
   return sizeMb > MAX_FILE_SIZE_MB
     ? `${name} larger than ${MAX_FILE_SIZE_MB}MB limit.`

@@ -1,6 +1,6 @@
 <script lang="ts">
   import Logo from "$icons/privacy-protect.svg?component";
-  import { SITE_TITLE } from "$lib/client/seo";
+  import { SITE_TITLE } from "$lib/seo";
 </script>
 
 <header class="my-4">

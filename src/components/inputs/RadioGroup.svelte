@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { toId } from "$lib/client/to-id";
+  import { toId } from "$lib/to-id";
 
   export let label: string;
   export let group: string;

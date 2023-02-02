@@ -45,7 +45,7 @@
     "dev": "npm run build:template && vite dev --https",
     "format": "prettier --plugin-search-dir . --write .",
     "lint": "npm run check && prettier --plugin-search-dir . --check . && eslint .",
-    "pp": "ts-node scripts/cli.ts",
+    "cli": "ts-node scripts/cli.ts",
     "prepare": "husky install && svelte-kit sync && npm run build:template",
     "preview": "vite preview",
     "watch:template": "npm run build:template:css -- --watch & npm run build:template:js -- --watch"

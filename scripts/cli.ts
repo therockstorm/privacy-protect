@@ -5,7 +5,6 @@ import readline from "readline";
 import { fileURLToPath } from "url";
 import { parseArgs } from "util";
 
-import { toUint8Array } from "../src/lib/client/to-array.js";
 import { ENCRYPTION_CONFIG } from "../src/lib/constants.js";
 import {
   encryptBySecretType,
@@ -16,6 +15,7 @@ import {
   SECRET_HTML_FILE_NAME,
   templateSecret,
 } from "../src/lib/template-secret.js";
+import { toUint8Array } from "../src/lib/to-array.js";
 import {
   validateFile,
   validateMessage,

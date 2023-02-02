@@ -8,11 +8,11 @@
   import Prose from "$components/Prose.svelte";
   import Well from "$components/Well.svelte";
   import { random } from "$lib/client/crypto";
-  import { SITE_TITLE, SITE_URL } from "$lib/client/seo";
-  import { toUint8Array } from "$lib/client/to-array";
   import { ENCRYPTION_CONFIG } from "$lib/constants";
   import { encryptBySecretType, SECRET_TYPES, secretTypes } from "$lib/encrypt";
+  import { SITE_TITLE, SITE_URL } from "$lib/seo";
   import { SECRET_HTML_FILE_NAME, templateSecret } from "$lib/template-secret";
+  import { toUint8Array } from "$lib/to-array";
   import {
     MAX_FILE_SIZE_MB,
     validateFile,

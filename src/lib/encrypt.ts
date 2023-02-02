@@ -1,5 +1,5 @@
-import { toUint8Array } from "./client/to-array.js";
 import { ENCRYPTION_CONFIG } from "./constants.js";
+import { toUint8Array } from "./to-array.js";
 
 export type EncryptionConfig = typeof ENCRYPTION_CONFIG;
 
