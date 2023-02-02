@@ -10,12 +10,8 @@
   import { random } from "$lib/client/crypto";
   import { SITE_TITLE, SITE_URL } from "$lib/client/seo";
   import { toUint8Array } from "$lib/client/to-array";
-  import {
-    encryptBySecretType,
-    ENCRYPTION_CONFIG,
-    SECRET_TYPES,
-    secretTypes,
-  } from "$lib/encrypt";
+  import { ENCRYPTION_CONFIG } from "$lib/constants";
+  import { encryptBySecretType, SECRET_TYPES, secretTypes } from "$lib/encrypt";
   import { SECRET_HTML_FILE_NAME, templateSecret } from "$lib/template-secret";
   import {
     MAX_FILE_SIZE_MB,
@@ -24,7 +20,8 @@
     validatePassword,
   } from "$lib/validate";
 
-  import css from "../assets/style.css?raw";
+  import js from "../assets/template.js?raw";
+  import css from "../assets/template.css?raw";
   import html from "../assets/template.html?raw";
 
   const title = "Securely share and store passwords and sensitive files.";
@@ -76,7 +73,7 @@
       subtle: window.crypto.subtle,
     });
     downloadHtml(
-      templateSecret({ ...encryptRes, ...args, css, html, passwordHint })
+      templateSecret({ ...encryptRes, ...args, css, js, html, passwordHint })
     );
 
     loading = false;

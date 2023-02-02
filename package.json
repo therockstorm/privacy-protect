@@ -38,14 +38,16 @@
   "scripts": {
     "badges": "docker run --rm -v $PWD/results:/home/chrome/reports emazzotta/lighthouse-badges /bin/sh -c \"lighthouse-badges --urls https://www.privacyprotect.dev/\"",
     "build": "npm run build:template && vite build",
-    "build:template": "npx tailwindcss -c ./tailwind.template.config.cjs -i ./src/app.css -o ./src/assets/style.css --minify",
+    "build:template": "npm run build:template:css && npm run build:template:js",
+    "build:template:css": "npx tailwindcss -c ./tailwind.template.config.cjs -i ./src/app.css -o ./src/assets/template.css --minify",
+    "build:template:js": "esbuild src/lib/template.ts --bundle --outfile=src/assets/template.js --target=chrome58,firefox57,safari11,edge16",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "dev": "npm run build:template && vite dev --https",
     "format": "prettier --plugin-search-dir . --write .",
     "lint": "npm run check && prettier --plugin-search-dir . --check . && eslint .",
     "pp": "ts-node scripts/cli.ts",
-    "prepare": "husky install && svelte-kit sync",
+    "prepare": "husky install && svelte-kit sync && npm run build:template",
     "preview": "vite preview",
-    "watch:template": "npm run build:template -- --watch"
+    "watch:template": "npm run build:template:css -- --watch & npm run build:template:js -- --watch"
   }
 }

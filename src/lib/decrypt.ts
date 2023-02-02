@@ -1,4 +1,4 @@
-import { ENCRYPTION_CONFIG } from "./encrypt.js";
+import { ENCRYPTION_CONFIG } from "./constants.js";
 
 type DecryptReq = Readonly<{
   cipherText: ArrayBuffer;
@@ -8,32 +8,29 @@ type DecryptReq = Readonly<{
   subtle: SubtleCrypto;
 }>;
 
-export async function decrypt({
-  cipherText,
-  iv,
-  password,
-  salt,
-  subtle,
-}: DecryptReq): Promise<ArrayBuffer> {
-  const { aesGcm, hash, iterations, keyLen, pbkdf2 } = ENCRYPTION_CONFIG;
-  const importedKey = await subtle.importKey(
+export async function decrypt(req: DecryptReq): Promise<ArrayBuffer> {
+  const importedKey = await req.subtle.importKey(
     "raw",
-    new TextEncoder().encode(password),
-    { name: pbkdf2 },
+    new TextEncoder().encode(req.password),
+    { name: ENCRYPTION_CONFIG.pbkdf2 },
     false,
     ["deriveKey"]
   );
-  const derivedKey = await subtle.deriveKey(
+  const derivedKey = await req.subtle.deriveKey(
     {
-      hash,
-      iterations,
-      name: pbkdf2,
-      salt,
+      hash: ENCRYPTION_CONFIG.hash,
+      iterations: ENCRYPTION_CONFIG.iterations,
+      name: ENCRYPTION_CONFIG.pbkdf2,
+      salt: req.salt,
     },
     importedKey,
-    { length: keyLen * 8, name: aesGcm },
+    { length: ENCRYPTION_CONFIG.keyLen * 8, name: ENCRYPTION_CONFIG.aesGcm },
     false,
     ["decrypt"]
   );
-  return subtle.decrypt({ iv, name: aesGcm }, derivedKey, cipherText);
+  return req.subtle.decrypt(
+    { iv: req.iv, name: ENCRYPTION_CONFIG.aesGcm },
+    derivedKey,
+    req.cipherText
+  );
 }

@@ -6,11 +6,8 @@ import { fileURLToPath } from "url";
 import { parseArgs } from "util";
 
 import { toUint8Array } from "../src/lib/client/to-array.js";
-import {
-  encryptBySecretType,
-  ENCRYPTION_CONFIG,
-  type Secret,
-} from "../src/lib/encrypt.js";
+import { ENCRYPTION_CONFIG } from "../src/lib/constants.js";
+import { encryptBySecretType, type Secret } from "../src/lib/encrypt.js";
 import {
   SECRET_HTML_FILE_NAME,
   templateSecret,
@@ -79,8 +76,8 @@ async function cli() {
         : toUint8Array(fileOrMessage),
     });
 
-    const [css, html] = await Promise.all(
-      ["style.css", "template.html"].map((asset) =>
+    const [css, html, js] = await Promise.all(
+      ["template.css", "template.html", "template.js"].map((asset) =>
         fs.readFile(join(ASSET_DIR, asset), "utf-8")
       )
     );
@@ -89,6 +86,7 @@ async function cli() {
       ...args,
       css,
       html,
+      js,
       passwordHint: values.hint,
     });
 

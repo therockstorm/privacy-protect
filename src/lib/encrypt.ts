@@ -1,12 +1,7 @@
 import { toUint8Array } from "./client/to-array.js";
+import { ENCRYPTION_CONFIG } from "./constants.js";
 
-export const ENCRYPTION_CONFIG = {
-  aesGcm: "AES-GCM",
-  hash: "SHA-512",
-  iterations: 2_100_000,
-  keyLen: 32,
-  pbkdf2: "PBKDF2",
-};
+export type EncryptionConfig = typeof ENCRYPTION_CONFIG;
 
 // eslint-disable-next-line sort-keys
 export const SECRET_TYPES = { message: "Message", file: "File" } as const;
@@ -44,21 +39,19 @@ export async function encryptBySecretType(
 
 async function encrypt({ iv, password, plainText, salt, subtle }: EncryptReq) {
   const { aesGcm, iterations, keyLen, pbkdf2, hash } = ENCRYPTION_CONFIG;
-  return subtle.encrypt(
-    { iv, name: aesGcm },
-    await subtle.deriveKey(
-      { hash, iterations, name: pbkdf2, salt },
-      await subtle.importKey(
-        "raw",
-        toUint8Array(password),
-        { name: pbkdf2 },
-        false,
-        ["deriveKey"]
-      ),
-      { length: keyLen * 8, name: aesGcm },
-      false,
-      ["encrypt"]
-    ),
-    plainText
+  const importedKey = await subtle.importKey(
+    "raw",
+    toUint8Array(password),
+    { name: pbkdf2 },
+    false,
+    ["deriveKey"]
   );
+  const derivedKey = await subtle.deriveKey(
+    { hash, iterations, name: pbkdf2, salt },
+    importedKey,
+    { length: keyLen * 8, name: aesGcm },
+    false,
+    ["encrypt"]
+  );
+  return subtle.encrypt({ iv, name: aesGcm }, derivedKey, plainText);
 }

@@ -41,7 +41,8 @@ npm install
 # Run development server
 npm run dev -- --open
 
-# While editing template.html, run watch mode to generate TailwindCSS styles
+# While editing template.html or template.ts, run watch mode to generate
+# template.js and template.css
 npm run watch:template
 ```
 
