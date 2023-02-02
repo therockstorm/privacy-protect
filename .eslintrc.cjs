@@ -7,7 +7,7 @@ module.exports = {
     "plugin:typescript-sort-keys/recommended",
     "prettier",
   ],
-  ignorePatterns: ["*.cjs"],
+  ignorePatterns: ["*.cjs", "**/template.js"],
   parser: "@typescript-eslint/parser",
   parserOptions: { ecmaVersion: 2020, sourceType: "module" },
   plugins: [

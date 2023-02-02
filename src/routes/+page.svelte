@@ -20,9 +20,9 @@
     validatePassword,
   } from "$lib/validate";
 
-  import js from "../assets/template.js?raw";
   import css from "../assets/template.css?raw";
   import html from "../assets/template.html?raw";
+  import js from "../assets/template.js?raw";
 
   const title = "Securely share and store passwords and sensitive files.";
   const fullTitle = `${SITE_TITLE} - ${title}`;
@@ -73,7 +73,7 @@
       subtle: window.crypto.subtle,
     });
     downloadHtml(
-      templateSecret({ ...encryptRes, ...args, css, js, html, passwordHint })
+      templateSecret({ ...encryptRes, ...args, css, html, js, passwordHint })
     );
 
     loading = false;
