@@ -72,7 +72,7 @@ export async function revealSecret(e?: Event) {
     });
     els.pw.value = "";
   } catch (error) {
-    inputError(els.pw, els.pwError, "Password dog invalid.");
+    inputError(els.pw, els.pwError, "Password invalid.");
     return;
   } finally {
     setLoading(false);
