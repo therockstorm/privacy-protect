@@ -10,3 +10,5 @@ node_modules
 
 package-lock.json
 static/example*.html
+src/assets/template.css
+src/assets/template.js
