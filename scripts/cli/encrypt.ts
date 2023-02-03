@@ -9,10 +9,7 @@ import {
   SECRET_TYPES,
   type SecretType,
 } from "../../src/lib/encrypt.js";
-import {
-  SECRET_HTML_FILE_NAME,
-  templateSecret,
-} from "../../src/lib/template-secret.js";
+import { getFileName, templateSecret } from "../../src/lib/template-secret.js";
 import { toUint8Array } from "../../src/lib/to-array.js";
 import {
   validateFile,
@@ -54,7 +51,7 @@ export async function encrypt(req: Parsed) {
   });
 
   const isDir = dirname(out) === out;
-  const dir = isDir ? join(out, SECRET_HTML_FILE_NAME) : out;
+  const dir = isDir ? join(out, getFileName()) : out;
   writeFileSync(
     dir,
     templateSecret({

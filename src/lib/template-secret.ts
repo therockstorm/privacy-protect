@@ -2,8 +2,6 @@ import { ENCRYPTION_CONFIG, type EncryptionConfig } from "./constants.js";
 import type { SecretType } from "./encrypt.js";
 import { bytesToHexStr } from "./mapper.js";
 
-export const SECRET_HTML_FILE_NAME = "privacyprotect.secret.html";
-
 type DynamicConfig = Readonly<{
   fileExtension?: string;
   passwordHint?: string;
@@ -23,6 +21,10 @@ type TemplateSecretReq = DynamicConfig &
 export type Config = EncryptionConfig &
   DynamicConfig &
   Readonly<{ cipherText: string; iv: string; salt: string }>;
+
+export function getFileName(): string {
+  return `${new Date().toISOString()}.secret.html`;
+}
 
 export function templateSecret(req: TemplateSecretReq): string {
   const { cipherText, css, html, iv, js, salt, ...rest } = req;

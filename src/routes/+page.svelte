@@ -11,7 +11,7 @@
   import { ENCRYPTION_CONFIG } from "$lib/constants";
   import { encryptBySecretType, SECRET_TYPES, secretTypes } from "$lib/encrypt";
   import { SITE_TITLE, SITE_URL } from "$lib/seo";
-  import { SECRET_HTML_FILE_NAME, templateSecret } from "$lib/template-secret";
+  import { getFileName, templateSecret } from "$lib/template-secret";
   import { toUint8Array } from "$lib/to-array";
   import {
     MAX_FILE_SIZE_MB,
@@ -114,7 +114,7 @@
   function downloadHtml(secretHtml: string) {
     const blob = new Blob([secretHtml], { type: "text/html" });
     const downloadA = document.createElement("a");
-    downloadA.setAttribute("download", SECRET_HTML_FILE_NAME);
+    downloadA.setAttribute("download", getFileName());
     downloadA.setAttribute("href", window.URL.createObjectURL(blob));
     document.body.appendChild(downloadA);
     downloadA.click();
