@@ -13,6 +13,7 @@
 
 build
 node_modules
+out
 package
 results/lighthouse_pwa.svg
 src/assets/template.css

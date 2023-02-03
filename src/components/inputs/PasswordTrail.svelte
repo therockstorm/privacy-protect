@@ -6,7 +6,7 @@
   export let showPassword = false;
 </script>
 
-<Trail on:click>
+<Trail ariaLabel="Password show/hide toggle" on:click>
   <Eye class={`h-4 w-4 ${showPassword ? "hidden" : ""}`} />
   <EyeSlash class={`h-4 w-4 ${showPassword ? "" : "hidden"}`} />
 </Trail>

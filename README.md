@@ -15,7 +15,6 @@ See the [launch blog](https://www.rocky.dev/blog/introducing-privacyprotect?utm_
 
 - [Security](#security)
 - [Usage](#usage)
-- [Changelog](#changelog)
 - [Acknowledgements](#acknowledgements)
 - [Contributing](#contributing)
 - [License](#lincense)
@@ -50,18 +49,14 @@ npm run watch:template
 
 ```bash
 # Show global help
-npm run cli -h
+./cli.ts -h
 
 # Show help for a command (e.g. encrypt)
-npm run cli -- encrypt -h
+./cli.ts encrypt -h
 
 # Encrypt a file with optional hint (it prompts for password)
-npm run cli -- encrypt -m "My secret" --hint "My hint" ./output
+./cli.ts encrypt -m "My secret" --hint "My hint" ./out
 ```
-
-## Changelog
-
-See [CHANGELOG.md](./CHANGELOG.md).
 
 ## Acknowledgements
 

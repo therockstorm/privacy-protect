@@ -58,8 +58,30 @@
     );
   }
 
+  // src/lib/mapper.ts
+  var IMG_EXTS = ["jpg", "jpeg", "png", "gif", "webp"];
+  function arrayBufToStr(buf) {
+    return new TextDecoder().decode(buf);
+  }
+  function hexStrToBytes(hex) {
+    const bytes = [];
+    for (let c = 0; c < hex.length; c += 2) {
+      bytes.push(parseInt(hex.substring(c, c + 2), 16));
+    }
+    return Uint8Array.from(bytes);
+  }
+  function toFileName(fileExtension) {
+    const fe = fileExtension != null ? fileExtension : "";
+    const ext = fe ? `.${fe}` : "";
+    return {
+      ext: fe,
+      isImg: IMG_EXTS.includes(fe),
+      name: `privacyprotect${ext}`
+    };
+  }
+
   // src/lib/template.ts
-  var CONFIG = {"aesGcm":"AES-GCM","hash":"SHA-512","iterations":2100000,"keyLen":32,"pbkdf2":"PBKDF2","secretType":"Message","passwordHint":"Three letters, all lowercase: an animal, commonly a pet, that barks.\n\n(Please use stronger passwords for your secrets!)","cipher":"db6348ceb6101f1466b35c73eb4d475f4605f5df6bb45d21a32101ecae124d4a0125a6ed56b4d1c2cd91bb1b44d15fc8b1f334716d776afb58dc58294f00d2f887e504e3a7db76162660116830a8be5e746e456cc9974992a01a7a2a1396164ec770ce7255174be2876e1a9cab08ff5f74d8a6c44f3d983f727ab5daf0daf8fb3e8c81486b6fd302d9964a4fe3599be38417e6dfadb5f788e9f3f06cceb8","iv":"523649ac0ece84aac75a64ed7812c2c144fe03fd0369c2702c021d1819d98c3e","salt":"de37862bf47b3a3b341b52135d492ea0b79100e3f6ba50794ab8b91e07325b91"};
+  var CONFIG = {"aesGcm":"AES-GCM","hash":"SHA-512","iterations":2100000,"keyLen":32,"pbkdf2":"PBKDF2","passwordHint":"Three letters, all lowercase: an animal, commonly a pet, that barks.\n\n    (Please use stronger passwords for your secrets!)","secretType":"Message","cipherText":"d1c5a3fb5f8e910a4ab2908d5742d00770694e6a02186077abf75a1d6e1918091afc5af82aad0f56b86be4eb1b5520eb954c481a10b29ad37ecaf791ee068fdea8867f3284833ff5c8523da7fa0bc427459eb9ceb5af1f52fe7eaf11590aec07eb4a6a4626a86fcee4bbfbf81c6f1539b7f51b9c27a598f785729ba00349a252f9b557354bf2e506b5a7291ae6d4d2aa0baa7af6047a63aed25ba85723eb241e7771","iv":"9b5068775570d1adbfefdcc6e287ca1fc95769f041fb01b9626df3b79fb45233","salt":"18cad7bb10b3de8a3380872064a66d5f9caa571b2ee942899b12d16a0be15cc5"};
   var CLS = {
     animate: "animate-pulse",
     hidden: "hidden",
@@ -79,7 +101,6 @@
     saveBtn: null
   };
   var els = ELS;
-  var IMG_EXTS = ["jpg", "jpeg", "png", "gif", "webp"];
   var showPassword = false;
   function init() {
     Object.keys(ELS).forEach((k) => {
@@ -110,7 +131,6 @@
     }
   }
   async function revealSecret(e) {
-    var _a;
     const pw = els.pw.value;
     if (pw.length == 0)
       return;
@@ -119,7 +139,9 @@
     let plainText;
     try {
       setLoading(true);
-      const params = [CONFIG.cipher, CONFIG.iv, CONFIG.salt].map(hexStrToBytes);
+      const params = [CONFIG.cipherText, CONFIG.iv, CONFIG.salt].map(
+        hexStrToBytes
+      );
       plainText = await decrypt(__spreadProps(__spreadValues({}, CONFIG), {
         cipherText: params[0],
         iv: params[1],
@@ -135,24 +157,22 @@
       setLoading(false);
     }
     if (CONFIG.secretType == "Message") {
-      const message = new TextDecoder().decode(plainText);
-      els.message.innerHTML = message;
+      els.message.innerHTML = arrayBufToStr(plainText);
     } else if (CONFIG.secretType == "File") {
       els.message.classList.add(CLS.hidden);
-      els.saveBtn.classList.remove(CLS.hidden);
-      const ext = (_a = CONFIG.fileExtension) != null ? _a : "";
-      const isImg = IMG_EXTS.includes(ext);
-      const fExt = ext ? `.${ext}` : "";
-      const fileName = `privacyprotect${fExt}`;
-      const b64 = btoa(
-        new Uint8Array(plainText).reduce((a, b) => a + String.fromCharCode(b), "")
+      const fn = toFileName(CONFIG.fileExtension);
+      const content = new Uint8Array(plainText).reduce(
+        (a, b) => a + String.fromCharCode(b),
+        ""
       );
-      const file = isImg ? `data:image/${ext};base64,${b64}` : `data:application/octet-stream;base64,${b64}`;
-      els.saveBtn.innerHTML = `Save ${fileName}`;
-      els.file.setAttribute("download", fileName);
-      els.file.setAttribute("href", file);
-      if (isImg) {
-        els.img.setAttribute("src", file);
+      const b64 = btoa(content);
+      const data = fn.isImg ? `data:image/${fn.ext};base64,${b64}` : `data:application/octet-stream;base64,${b64}`;
+      els.saveBtn.classList.remove(CLS.hidden);
+      els.saveBtn.innerHTML = `Save ${fn.name}`;
+      els.file.setAttribute("download", fn.name);
+      els.file.setAttribute("href", data);
+      if (fn.isImg) {
+        els.img.setAttribute("src", data);
         els.img.classList.remove(CLS.hidden);
       }
     } else
@@ -161,13 +181,6 @@
   function setLoading(loading) {
     els.revealBtn.disabled = loading;
     loading ? els.revealBtn.classList.add(CLS.animate) : els.revealBtn.classList.remove(CLS.animate);
-  }
-  function hexStrToBytes(hex) {
-    const bytes = [];
-    for (let c = 0; c < hex.length; c += 2) {
-      bytes.push(parseInt(hex.substring(c, c + 2), 16));
-    }
-    return Uint8Array.from(bytes);
   }
   function inputError(el, errorEl, error) {
     errorEl.innerHTML = error;
@@ -230,6 +243,7 @@
                       type="password"
                     />
                     <button
+                      aria-label="Password show/hide toggle"
                       class="relative -ml-px inline-flex items-center rounded-r-md border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 focus-within:z-10"
                       onclick="togglePwVisibility(event)"
                       type="button"

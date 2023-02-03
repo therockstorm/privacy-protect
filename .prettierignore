@@ -8,6 +8,7 @@ node_modules
 .env.*
 !.env.example
 
+out
 package-lock.json
 static/example*.html
 src/assets/template.css

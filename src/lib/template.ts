@@ -1,4 +1,5 @@
 import { decrypt } from "./decrypt.js";
+import { arrayBufToStr, hexStrToBytes, toFileName } from "./mapper.js";
 import type { Config } from "./template-secret.js";
 
 const CONFIG: Config = `{.CONFIG}` as unknown as Config;
@@ -21,7 +22,6 @@ const ELS: Record<string, HTMLElement | null> = {
   saveBtn: null,
 };
 const els = ELS as Record<string, HTMLInputElement>;
-const IMG_EXTS = ["jpg", "jpeg", "png", "gif", "webp"];
 let showPassword = false;
 
 export function init() {
@@ -62,7 +62,9 @@ export async function revealSecret(e?: Event) {
   let plainText;
   try {
     setLoading(true);
-    const params = [CONFIG.cipher, CONFIG.iv, CONFIG.salt].map(hexStrToBytes);
+    const params = [CONFIG.cipherText, CONFIG.iv, CONFIG.salt].map(
+      hexStrToBytes
+    );
     plainText = await decrypt({
       ...CONFIG,
       cipherText: params[0],
@@ -80,26 +82,25 @@ export async function revealSecret(e?: Event) {
   }
 
   if (CONFIG.secretType == "Message") {
-    const message = new TextDecoder().decode(plainText);
-    els.message.innerHTML = message;
+    els.message.innerHTML = arrayBufToStr(plainText);
   } else if (CONFIG.secretType == "File") {
     els.message.classList.add(CLS.hidden);
-    els.saveBtn.classList.remove(CLS.hidden);
-    const ext = CONFIG.fileExtension ?? "";
-    const isImg = IMG_EXTS.includes(ext);
-    const fExt = ext ? `.${ext}` : "";
-    const fileName = `privacyprotect${fExt}`;
-    const b64 = btoa(
-      new Uint8Array(plainText).reduce((a, b) => a + String.fromCharCode(b), "")
+
+    const fn = toFileName(CONFIG.fileExtension);
+    const content = new Uint8Array(plainText).reduce(
+      (a, b) => a + String.fromCharCode(b),
+      ""
     );
-    const file = isImg
-      ? `data:image/${ext};base64,${b64}`
+    const b64 = btoa(content);
+    const data = fn.isImg
+      ? `data:image/${fn.ext};base64,${b64}`
       : `data:application/octet-stream;base64,${b64}`;
-    els.saveBtn.innerHTML = `Save ${fileName}`;
-    els.file.setAttribute("download", fileName);
-    els.file.setAttribute("href", file);
-    if (isImg) {
-      els.img.setAttribute("src", file);
+    els.saveBtn.classList.remove(CLS.hidden);
+    els.saveBtn.innerHTML = `Save ${fn.name}`;
+    els.file.setAttribute("download", fn.name);
+    els.file.setAttribute("href", data);
+    if (fn.isImg) {
+      els.img.setAttribute("src", data);
       els.img.classList.remove(CLS.hidden);
     }
   } else console.error(`Invalid secret type ${CONFIG.secretType}`);
@@ -110,14 +111,6 @@ function setLoading(loading: boolean) {
   loading
     ? els.revealBtn.classList.add(CLS.animate)
     : els.revealBtn.classList.remove(CLS.animate);
-}
-
-function hexStrToBytes(hex: string) {
-  const bytes = [];
-  for (let c = 0; c < hex.length; c += 2) {
-    bytes.push(parseInt(hex.substring(c, c + 2), 16));
-  }
-  return Uint8Array.from(bytes);
 }
 
 function inputError(el: HTMLElement, errorEl: HTMLElement, error: string) {

@@ -4,7 +4,7 @@ import { toUint8Array } from "./to-array.js";
 // eslint-disable-next-line sort-keys
 export const SECRET_TYPES = { message: "Message", file: "File" } as const;
 export const secretTypes = Object.values(SECRET_TYPES);
-export type Secret = (typeof secretTypes)[number];
+export type SecretType = (typeof secretTypes)[number];
 
 type EncryptReq = Readonly<{
   iv: Uint8Array;
@@ -17,12 +17,12 @@ type EncryptReq = Readonly<{
 type EncryptBySecretTypeReq = EncryptReq &
   Readonly<{
     fileExtension?: string;
-    secretType: Secret;
+    secretType: SecretType;
     subtle: SubtleCrypto;
   }>;
 
 type EncryptBySecretTypeRes = Readonly<{
-  cipher: ArrayBuffer;
+  cipherText: ArrayBuffer;
   fileExtension?: string;
 }>;
 
@@ -30,7 +30,7 @@ export async function encryptBySecretType(
   req: EncryptBySecretTypeReq
 ): Promise<EncryptBySecretTypeRes> {
   const { fileExtension, secretType } = req;
-  const res = { cipher: await encrypt(req) };
+  const res = { cipherText: await encrypt(req) };
 
   return secretType === SECRET_TYPES.file ? { ...res, fileExtension } : res;
 }

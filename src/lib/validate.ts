@@ -1,4 +1,4 @@
-import { type Secret, SECRET_TYPES } from "./encrypt.js";
+import { SECRET_TYPES, type SecretType } from "./encrypt.js";
 
 export const MAX_FILE_SIZE_MB = 100;
 
@@ -6,7 +6,7 @@ type ValidateInputReq<T> = Readonly<{
   lenient: boolean;
   match: boolean;
   name: string;
-  secretType: Secret;
+  secretType: SecretType;
   val?: null | T;
 }>;
 

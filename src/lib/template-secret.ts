@@ -1,18 +1,18 @@
-import { bytesToHexStr } from "./bytes-to-hex.js";
 import { ENCRYPTION_CONFIG, type EncryptionConfig } from "./constants.js";
-import type { Secret } from "./encrypt.js";
+import type { SecretType } from "./encrypt.js";
+import { bytesToHexStr } from "./mapper.js";
 
 export const SECRET_HTML_FILE_NAME = "privacyprotect.secret.html";
 
 type DynamicConfig = Readonly<{
   fileExtension?: string;
   passwordHint?: string;
-  secretType: Secret;
+  secretType: SecretType;
 }>;
 
 type TemplateSecretReq = DynamicConfig &
   Readonly<{
-    cipher: ArrayBuffer;
+    cipherText: ArrayBuffer;
     css: string;
     html: string;
     iv: Uint8Array;
@@ -22,15 +22,15 @@ type TemplateSecretReq = DynamicConfig &
 
 export type Config = EncryptionConfig &
   DynamicConfig &
-  Readonly<{ cipher: string; iv: string; salt: string }>;
+  Readonly<{ cipherText: string; iv: string; salt: string }>;
 
 export function templateSecret(req: TemplateSecretReq): string {
-  const { cipher, css, html, iv, js, salt, ...rest } = req;
-  const [c, i, s] = [cipher, iv, salt].map(bytesToHexStr);
+  const { cipherText, css, html, iv, js, salt, ...rest } = req;
+  const [c, i, s] = [cipherText, iv, salt].map(bytesToHexStr);
   const config: Config = {
     ...ENCRYPTION_CONFIG,
     ...rest,
-    cipher: c,
+    cipherText: c,
     iv: i,
     salt: s,
   };

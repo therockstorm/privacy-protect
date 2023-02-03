@@ -1,4 +1,4 @@
-import type { EncryptionConfig } from "./constants";
+import type { EncryptionConfig } from "./constants.js";
 
 type DecryptReq = EncryptionConfig &
   Readonly<{
