@@ -11,9 +11,19 @@ EOM
 "The only true wisdom is in knowing you know nothing." - Socrates
 EOM
   password="dog"
+  message_path="./static/example-message.html"
+  image_path="./static/example-image.html"
+  out_path="./privacyprotect.gif"
 
-  ./cli.ts encrypt -m "$message" --hint "$hint" ./static/example-message.html -p $password
-  ./cli.ts encrypt -f ./scripts/example.gif --hint "$hint" ./static/example-image.html -p $password
+  ./cli.ts encrypt -m "$message" --hint "$hint" $message_path -p $password
+  ./cli.ts encrypt -f ./scripts/example.gif --hint "$hint" $image_path -p $password
+
+  ./cli.ts decrypt $message_path -p $password
+  ./cli.ts decrypt $image_path -p $password
+
+  open $out_path
+  sleep 1
+  rm $out_path
 }
 
 generate

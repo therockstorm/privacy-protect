@@ -85,9 +85,7 @@ async function validate({ positionals, values }: Parsed): Promise<ValidateRes> {
     errors.push(`File '${file}' not found.`);
   }
 
-  const matches = DECRYPT_REGEX.exec(
-    await fs.readFile(values.file ?? "", "utf-8")
-  );
+  const matches = DECRYPT_REGEX.exec(await fs.readFile(file ?? "", "utf-8"));
 
   const UNSUPPORTED = `File '${file}' is an unsupported format.`;
   let config: Config | undefined;
