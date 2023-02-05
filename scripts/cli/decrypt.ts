@@ -1,7 +1,7 @@
 import { webcrypto } from "crypto";
 import { promises as fs, writeFileSync } from "fs";
 
-import { decrypt as libDecrypt } from "../../src/lib/decrypt.js";
+import { decrypt, type DecryptRes } from "../../src/lib/decrypt.js";
 import {
   arrayBufToStr,
   hexStrToBytes,
@@ -14,7 +14,9 @@ import { type Parsed, USAGE } from "./parse.js";
 
 const DECRYPT_REGEX = /^ {2}var CONFIG = ({.+})?;$/m;
 
-export async function decrypt(req: Parsed) {
+type ValidateRes = string | Readonly<{ config: Config; password: string }>;
+
+export async function decryptCli(req: Parsed) {
   const validated = await validate(req);
   if (typeof validated === "string") {
     console.error(validated);
@@ -22,34 +24,39 @@ export async function decrypt(req: Parsed) {
   }
 
   const { config, password } = validated;
-  const params = [config.cipherText, config.iv, config.salt].map(hexStrToBytes);
-  let plainText: ArrayBuffer;
+  let res: DecryptRes;
 
   try {
-    plainText = await libDecrypt({
-      ...config,
-      cipherText: params[0],
-      iv: params[1],
-      password,
-      salt: params[2],
-      subtle: webcrypto.subtle,
-    });
+    res = (
+      await decrypt({
+        ...config,
+        payloads: config.payloads.map((p) => ({
+          ...p,
+          cipherText: hexStrToBytes(p.cipherText),
+          iv: hexStrToBytes(p.iv),
+          password,
+          salt: hexStrToBytes(p.salt),
+        })),
+        subtle: webcrypto.subtle,
+      })
+    ).filter((r) => notEmpty(r.cipherText))[0];
   } catch (error) {
     console.error("Password invalid.");
     process.exit(1);
   }
 
-  if (config.secretType == "Message") {
-    console.log(arrayBufToStr(plainText));
-  } else if (config.secretType == "File") {
-    const { name } = toFileName(config.fileExtension);
-    writeFileSync(name, Buffer.from(plainText), "binary");
+  if (!res || !res.cipherText) throw new Error("Invalid password.");
+  if (res.secretType == "Message") {
+    console.log(arrayBufToStr(res.cipherText));
+  } else if (res.secretType == "File") {
+    const { name } = toFileName(res.fileExtension);
+    writeFileSync(name, Buffer.from(res.cipherText), "binary");
     console.log(`Wrote file '${name}'.`);
-  } else console.error(`Invalid secret type ${config.secretType}`);
+  } else console.error(`Invalid secret type ${res.secretType}`);
 }
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-async function validate({ positionals, values }: Parsed) {
+async function validate({ positionals, values }: Parsed): Promise<ValidateRes> {
   if (positionals.length > 2 || values.help) return USAGE.decrypt;
 
   const errors: (string | undefined)[] = [];
@@ -79,7 +86,7 @@ async function validate({ positionals, values }: Parsed) {
   );
 
   const UNSUPPORTED = `File '${file}' is an unsupported format.`;
-  let config: Config | undefined = undefined;
+  let config: Config | undefined;
   try {
     const c = matches?.[1];
     if (!c) errors.push(UNSUPPORTED);
@@ -106,4 +113,8 @@ async function validate({ positionals, values }: Parsed) {
   if (passwordError) return passwordError;
 
   return { config, password };
+}
+
+function notEmpty<T>(value?: T | null): value is T {
+  return value != null;
 }

@@ -1,19 +1,61 @@
-import type { EncryptionConfig } from "./constants.js";
+import type {
+  EncryptionConfig,
+  WithCipherText,
+  WithIvSalt,
+  WithPassword,
+  WithSecretType,
+  WithSubtle,
+} from "./constants.js";
+
+type Payload = WithCipherText & WithIvSalt & WithPassword & WithSecretType;
 
 type DecryptReq = EncryptionConfig &
-  Readonly<{
-    cipherText: ArrayBuffer;
-    iv: Uint8Array;
-    password: string;
-    salt: Uint8Array;
-    subtle: SubtleCrypto;
-  }>;
+  WithSubtle &
+  Readonly<{ payloads: readonly Payload[] }>;
 
-export async function decrypt(req: DecryptReq): Promise<ArrayBuffer> {
+type DecryptOneReq = EncryptionConfig &
+  WithSubtle &
+  Readonly<{ payload: Payload }>;
+
+export type DecryptRes = WithCipherText<ArrayBuffer | undefined> &
+  WithSecretType;
+
+export function decrypt(req: DecryptReq): Promise<DecryptRes[]> {
+  const config = {
+    encryptionAlgo: req.encryptionAlgo,
+    hash: req.hash,
+    iterations: req.iterations,
+    keyDerivationAlgo: req.keyDerivationAlgo,
+    keyLen: req.keyLen,
+  };
+
+  return Promise.all(
+    req.payloads.map(async (payload) => {
+      let cipherText: ArrayBuffer | undefined;
+      try {
+        cipherText = await decryptOne({
+          ...config,
+          payload,
+          subtle: req.subtle,
+        });
+      } catch (error) {
+        // Ignore
+        console.log("Failed decrypting", error);
+      }
+      return {
+        cipherText,
+        fileExtension: payload.fileExtension,
+        secretType: payload.secretType,
+      };
+    })
+  );
+}
+
+async function decryptOne(req: DecryptOneReq) {
   const importedKey = await req.subtle.importKey(
     "raw",
-    new TextEncoder().encode(req.password),
-    { name: req.pbkdf2 },
+    new TextEncoder().encode(req.payload.password),
+    { name: req.keyDerivationAlgo },
     false,
     ["deriveKey"]
   );
@@ -21,17 +63,17 @@ export async function decrypt(req: DecryptReq): Promise<ArrayBuffer> {
     {
       hash: req.hash,
       iterations: req.iterations,
-      name: req.pbkdf2,
-      salt: req.salt,
+      name: req.keyDerivationAlgo,
+      salt: req.payload.salt,
     },
     importedKey,
-    { length: req.keyLen * 8, name: req.aesGcm },
+    { length: req.keyLen * 8, name: req.encryptionAlgo },
     false,
     ["decrypt"]
   );
   return req.subtle.decrypt(
-    { iv: req.iv, name: req.aesGcm },
+    { iv: req.payload.iv, name: req.encryptionAlgo },
     derivedKey,
-    req.cipherText
+    req.payload.cipherText
   );
 }

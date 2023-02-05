@@ -8,8 +8,8 @@
   import Prose from "$components/Prose.svelte";
   import Well from "$components/Well.svelte";
   import { random } from "$lib/client/crypto";
-  import { ENCRYPTION_CONFIG } from "$lib/constants";
-  import { encryptBySecretType, SECRET_TYPES, secretTypes } from "$lib/encrypt";
+  import { ENCRYPTION_CONFIG, secretTypes, SECRET_TYPES } from "$lib/constants";
+  import { encryptBySecretType } from "$lib/encrypt";
   import { SITE_TITLE, SITE_URL } from "$lib/seo";
   import { getFileName, templateSecret } from "$lib/template-secret";
   import { toUint8Array } from "$lib/to-array";
@@ -75,12 +75,11 @@
     const { keyLen } = ENCRYPTION_CONFIG;
     const args = { iv: random(keyLen), salt: random(keyLen), secretType };
     const encryptRes = await encryptBySecretType({
-      ...validated,
-      ...args,
+      payloads: [{ ...validated, ...args }],
       subtle: window.crypto.subtle,
     });
     downloadHtml(
-      templateSecret({ ...encryptRes, ...args, css, html, js, passwordHint })
+      templateSecret({ ...encryptRes[0], ...args, css, html, js, passwordHint })
     );
 
     loading = false;
@@ -113,12 +112,12 @@
 
   function downloadHtml(secretHtml: string) {
     const blob = new Blob([secretHtml], { type: "text/html" });
-    const downloadA = document.createElement("a");
-    downloadA.setAttribute("download", getFileName());
-    downloadA.setAttribute("href", window.URL.createObjectURL(blob));
-    document.body.appendChild(downloadA);
-    downloadA.click();
-    document.body.removeChild(downloadA);
+    const aEl = document.createElement("a");
+    aEl.setAttribute("download", getFileName());
+    aEl.setAttribute("href", window.URL.createObjectURL(blob));
+    document.body.appendChild(aEl);
+    aEl.click();
+    document.body.removeChild(aEl);
   }
 
   function resetInputs() {

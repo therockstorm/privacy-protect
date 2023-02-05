@@ -1,6 +1,6 @@
 #!/usr/bin/env npx ts-node
-import { decrypt } from "./scripts/cli/decrypt.js";
-import { encrypt } from "./scripts/cli/encrypt.js";
+import { decryptCli } from "./scripts/cli/decrypt.js";
+import { encryptCli } from "./scripts/cli/encrypt.js";
 import { parse, USAGE } from "./scripts/cli/parse.js";
 
 async function cli() {
@@ -10,10 +10,10 @@ async function cli() {
 
   switch (positionals[0]) {
     case "encrypt":
-      await encrypt(parsed);
+      await encryptCli(parsed);
       break;
     case "decrypt":
-      await decrypt(parsed);
+      await decryptCli(parsed);
       break;
     default:
       console.error(USAGE.global);

@@ -1,42 +1,52 @@
-import { ENCRYPTION_CONFIG } from "./constants.js";
+import {
+  type CipherPayload,
+  ENCRYPTION_CONFIG,
+  SECRET_TYPES,
+  type WithIvSalt,
+  type WithPassword,
+  type WithPlainText,
+  type WithSecretType,
+  type WithSubtle,
+} from "./constants.js";
 import { toUint8Array } from "./to-array.js";
 
-// eslint-disable-next-line sort-keys
-export const SECRET_TYPES = { message: "Message", file: "File" } as const;
-export const secretTypes = Object.values(SECRET_TYPES);
-export type SecretType = (typeof secretTypes)[number];
+type Payload = WithIvSalt & WithPassword & WithPlainText & WithSecretType;
 
-type EncryptReq = Readonly<{
-  iv: Uint8Array;
-  password: string;
-  plainText: ArrayBufferView | ArrayBuffer;
-  salt: Uint8Array;
-  subtle: SubtleCrypto;
-}>;
+type EncryptBySecretTypeReq = WithSubtle &
+  Readonly<{ payloads: readonly Payload[] }>;
 
-type EncryptBySecretTypeReq = EncryptReq &
-  Readonly<{
-    fileExtension?: string;
-    secretType: SecretType;
-    subtle: SubtleCrypto;
-  }>;
+type EncryptOneReq = WithSubtle & Readonly<{ payload: Payload }>;
 
-type EncryptBySecretTypeRes = Readonly<{
-  cipherText: ArrayBuffer;
-  fileExtension?: string;
-}>;
-
-export async function encryptBySecretType(
-  req: EncryptBySecretTypeReq
-): Promise<EncryptBySecretTypeRes> {
-  const { fileExtension, secretType } = req;
-  const res = { cipherText: await encrypt(req) };
-
-  return secretType === SECRET_TYPES.file ? { ...res, fileExtension } : res;
+export function encryptBySecretType({
+  payloads,
+  subtle,
+}: EncryptBySecretTypeReq): Promise<readonly CipherPayload[]> {
+  return Promise.all(
+    payloads.map(async (payload) => {
+      const { iv, fileExtension, salt, secretType } = payload;
+      const res = {
+        cipherText: await encryptOne({ payload, subtle }),
+        fileExtension,
+        iv,
+        salt,
+        secretType,
+      };
+      return secretType === SECRET_TYPES.file ? { ...res, fileExtension } : res;
+    })
+  );
 }
 
-async function encrypt({ iv, password, plainText, salt, subtle }: EncryptReq) {
-  const { aesGcm, iterations, keyLen, pbkdf2, hash } = ENCRYPTION_CONFIG;
+async function encryptOne({
+  payload: { iv, password, plainText, salt },
+  subtle,
+}: EncryptOneReq) {
+  const {
+    encryptionAlgo: aesGcm,
+    iterations,
+    keyLen,
+    keyDerivationAlgo: pbkdf2,
+    hash,
+  } = ENCRYPTION_CONFIG;
   const importedKey = await subtle.importKey(
     "raw",
     toUint8Array(password),

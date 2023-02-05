@@ -1,4 +1,4 @@
-import { SECRET_TYPES, type SecretType } from "./encrypt.js";
+import { SECRET_TYPES, type SecretType } from "./constants.js";
 
 export const MAX_FILE_SIZE_MB = 100;
 

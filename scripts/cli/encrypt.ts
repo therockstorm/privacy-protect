@@ -1,14 +1,17 @@
 import { webcrypto } from "crypto";
-import { promises as fs, writeFileSync } from "fs";
+import { promises as fs, Stats, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
-import { ENCRYPTION_CONFIG } from "../../src/lib/constants.js";
 import {
-  encryptBySecretType,
+  ENCRYPTION_CONFIG,
   SECRET_TYPES,
   type SecretType,
-} from "../../src/lib/encrypt.js";
+  type WithPassword,
+  type WithPlainText,
+  type WithSecretType,
+} from "../../src/lib/constants.js";
+import { encryptBySecretType } from "../../src/lib/encrypt.js";
 import { getFileName, templateSecret } from "../../src/lib/template-secret.js";
 import { toUint8Array } from "../../src/lib/to-array.js";
 import {
@@ -27,59 +30,66 @@ const ASSET_DIR = join(
   "assets"
 );
 
-export async function encrypt(req: Parsed) {
+type Payload = WithPassword & WithPlainText & WithSecretType;
+
+type ValidateRes =
+  | string
+  | Readonly<{
+      hint: string | undefined;
+      out: Readonly<{ isFile: boolean; path: string }>;
+      payloads: readonly Payload[];
+    }>;
+
+export async function encryptCli(req: Parsed) {
   const validated = await validate(req);
   if (typeof validated === "string") {
     console.error(validated);
     process.exit(1);
   }
 
-  const { hint, out, secretType } = validated;
+  const { hint, out, payloads } = validated;
   const [css, html, js] = await Promise.all(
     ["template.css", "template.html", "template.js"].map((asset) =>
       fs.readFile(join(ASSET_DIR, asset), "utf-8")
     )
   );
   const { keyLen } = ENCRYPTION_CONFIG;
-  const [iv, salt] = [random(keyLen), random(keyLen)];
   const encryptRes = await encryptBySecretType({
-    ...validated,
-    iv,
-    salt,
-    secretType,
+    payloads: payloads.map((p) => ({
+      ...p,
+      iv: random(keyLen),
+      salt: random(keyLen),
+    })),
     subtle: webcrypto.subtle,
   });
 
-  const isDir = dirname(out) === out;
-  const dir = isDir ? join(out, getFileName()) : out;
+  const file = out.isFile ? out.path : join(out.path, getFileName());
   writeFileSync(
-    dir,
+    file,
     templateSecret({
-      ...encryptRes,
       css,
       html,
-      iv,
       js,
       passwordHint: hint,
-      salt,
-      secretType,
+      payloads: encryptRes,
     })
   );
-  console.log(`Wrote file '${dir}'.`);
+  console.log(`Wrote file '${file}'.`);
 }
 
 // eslint-disable-next-line sonarjs/cognitive-complexity
-async function validate({ positionals, values }: Parsed) {
+async function validate({ positionals, values }: Parsed): Promise<ValidateRes> {
   if (positionals.length !== 2 || values.help) return USAGE.encrypt;
 
   const errors: (string | undefined)[] = [];
   const [, out] = positionals;
-  const { file, hint, message, password } = values;
+  const { deniableMessage, file, hint, message, password } = values;
   const secretType: SecretType = file ? "File" : "Message";
 
   const lenient = false;
-  if (!(await dirExists(dirname(out)))) {
-    errors.push(`Output '${out}' not found or is not a directory.`);
+  const outStat = await stat(out);
+  if (outStat == null || (!outStat.isFile() && !outStat.isDirectory())) {
+    errors.push(`Output '${out}' not found.`);
   }
   if ((!file && !message) || (file && message)) {
     errors.push(`Either --file or --message option required, but not both.`);
@@ -101,32 +111,72 @@ async function validate({ positionals, values }: Parsed) {
     errors.push(validateMessage({ lenient, secretType, val: message }));
   }
 
+  errors.push(
+    validateMessage({ lenient: true, secretType, val: deniableMessage })
+  );
+
   const error = errors.filter((error) => error != null).join("\n");
   if (error) return error;
 
   const pw = password ?? (await hiddenQuestion("Password: "));
-  const passwordError = validatePassword({
+  const pwError = validatePassword({
     lenient,
     secretType,
     val: pw,
   });
-  if (passwordError) return passwordError;
+  if (pwError) return pwError;
 
-  const res = { hint, out, password: pw, secretType };
+  let deniablePw: string | undefined;
+  if (deniableMessage) {
+    console.log("ROCKY", deniableMessage);
+    deniablePw = await hiddenQuestion("Deniable password: ");
+    const deniablePwError = validatePassword({
+      lenient,
+      secretType,
+      val: deniablePw,
+    });
+    if (deniablePwError) return deniablePwError;
+  }
+
+  const payloads: Payload[] =
+    deniableMessage && deniablePw
+      ? [
+          {
+            password: deniablePw,
+            plainText: toUint8Array(deniableMessage),
+            secretType: "Message",
+          },
+        ]
+      : [];
+  const res = { hint, out: { isFile: outStat?.isFile() ?? false, path: out } };
+
   return secretType === SECRET_TYPES.file && file != null
     ? {
         ...res,
-        fileExtension: file.split(".").pop(),
-        plainText: await fs.readFile(file),
+        payloads: [
+          ...payloads,
+          {
+            fileExtension: file.split(".").pop(),
+            password: pw,
+            plainText: await fs.readFile(file),
+            secretType,
+          },
+        ],
       }
-    : { ...res, plainText: toUint8Array(message) };
+    : {
+        ...res,
+        payloads: [
+          ...payloads,
+          { password: pw, plainText: toUint8Array(message), secretType },
+        ],
+      };
 }
 
-async function dirExists(path: string): Promise<boolean> {
+async function stat(path: string): Promise<Stats | undefined> {
   try {
-    return (await fs.lstat(path)).isDirectory();
+    return await fs.lstat(path);
   } catch {
-    return false;
+    return undefined;
   }
 }
 
