@@ -8,7 +8,7 @@ import {
   type WithSecretType,
   type WithSubtle,
 } from "./constants.js";
-import { toUint8Array } from "./to-array.js";
+import { toUint8Array } from "./mappers.js";
 
 type Payload = WithIvSalt & WithPassword & WithPlainText & WithSecretType;
 

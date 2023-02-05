@@ -7,24 +7,24 @@
   import TextArea from "$components/inputs/TextArea.svelte";
   import Prose from "$components/Prose.svelte";
   import Well from "$components/Well.svelte";
-  import { random } from "$lib/client/crypto";
+  import { random } from "$lib/client/crypto.js";
   import {
     ENCRYPTION_CONFIG,
     SECRET_TYPES,
     secretTypes,
     type WithPassword,
     type WithPlainText,
-  } from "$lib/constants";
-  import { encryptBySecretType } from "$lib/encrypt";
-  import { SITE_TITLE, SITE_URL } from "$lib/seo";
-  import { getFileName, templateSecret } from "$lib/template-secret";
-  import { toUint8Array } from "$lib/to-array";
+  } from "$lib/constants.js";
+  import { encryptBySecretType } from "$lib/encrypt.js";
+  import { toUint8Array } from "$lib/mappers.js";
+  import { SITE_TITLE, SITE_URL } from "$lib/seo.js";
+  import { getFileName, templateSecret } from "$lib/template-secret.js";
   import {
     MAX_FILE_SIZE_MB,
     validateFile,
     validateMessage,
     validatePassword,
-  } from "$lib/validate";
+  } from "$lib/validators.js";
 
   import css from "../assets/template.css?raw";
   import html from "../assets/template.html?raw";

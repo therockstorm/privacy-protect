@@ -1,6 +1,6 @@
 <script lang="ts">
   import Prose from "$components/Prose.svelte";
-  import { SITE_TITLE, SITE_URL } from "$lib/seo";
+  import { SITE_TITLE, SITE_URL } from "$lib/seo.js";
 
   const title = "Security";
   const fullTitle = `${title} - ${SITE_TITLE}`;

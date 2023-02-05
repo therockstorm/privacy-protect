@@ -85,7 +85,7 @@
     );
   }
 
-  // src/lib/mapper.ts
+  // src/lib/mappers.ts
   var IMG_EXTS = ["jpg", "jpeg", "png", "gif", "webp"];
   function arrayBufToStr(buf) {
     return new TextDecoder().decode(buf);
@@ -111,13 +111,13 @@
   var SECRET_TYPES = { message: "Message", file: "File" };
   var secretTypes = Object.values(SECRET_TYPES);
 
-  // src/lib/validate.ts
+  // src/lib/validators.ts
   function notEmpty(value) {
     return value != null;
   }
 
   // src/lib/template.ts
-  var CONFIG = {"encryptionAlgo":"AES-GCM","hash":"SHA-512","iterations":2100000,"keyDerivationAlgo":"PBKDF2","keyLen":32,"passwordHint":"Three letters, all lowercase: an animal, commonly a pet, that barks.\n\n(Please use stronger passwords for your secrets!)","payloads":[{"cipherText":"94a5d45e0f1297651dca959332eb1a4c933bf35bd4deb0f535ae765a835031a085e710e1d809779be7b84a04d7c500e9a4e28d8e4fba8bc59eeb490b650b4a02360d042f2a5a1051ca6745ecdbfc82c958647c15cacb4a49676d200bee5f55cf134a0b69e7d4937d43e3c8dc6159cc007780891f0048134fafda29005fd1bb6da4492de1d2be6a7c851cfc2b722eddc64bb1f300ac784ac71626c4c80679","iv":"6b413073b0000099807d46dc3a4b07cf31f573c6a0fa0df1f82fda427735d6ba","salt":"05f146298e89796bd6e10ee714ba2487f2306d6e1d6b468930acd41730371685","secretType":"Message"}]};
+  var CONFIG = {"encryptionAlgo":"AES-GCM","hash":"SHA-512","iterations":2100000,"keyDerivationAlgo":"PBKDF2","keyLen":32,"passwordHint":"Three letters, all lowercase: an animal, commonly a pet, that barks.\n\n(Please use stronger passwords for your secrets!)","payloads":[{"cipherText":"dfad77b7c2d7285816062aac4afe93401d6f336c46c992357cb1faf83f7beb831346b064ed54b0c45317ad6afbae6c12b3101b547ec1f909068d4575b44950b29af716da18bc096d35c3c630675b3dafb81a145469db381e755a3bfe4a5bdebc001e86744d9340b2085957ae57da3d56463775e05d08769f503e3eafcc6aa9e7d3d432d5c8f25256057dd57c8346a760bd78301c19923eddc9c43a812e38","iv":"7123e3ae90f7dd740724343378a0ff8f46400aac17f6f16e756e55fa1a27da81","salt":"a90d374a77efd1e13b57e462a06424edfd14cb09ed1712cf836618f9434741c4","secretType":"Message"}]};
   var CLS = {
     animate: "animate-pulse",
     hidden: "hidden",

@@ -1,7 +1,7 @@
 import { decrypt, type DecryptRes } from "./decrypt.js";
-import { arrayBufToStr, hexStrToBytes, toFileName } from "./mapper.js";
+import { arrayBufToStr, hexStrToBytes, toFileName } from "./mappers.js";
 import type { Config } from "./template-secret.js";
-import { notEmpty } from "./validate.js";
+import { notEmpty } from "./validators.js";
 
 const CONFIG: Config = `{.CONFIG}` as unknown as Config;
 const CLS = {

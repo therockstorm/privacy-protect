@@ -15,10 +15,6 @@ export type Validator<T> = Pick<
   "lenient" | "secretType" | "val"
 >;
 
-export function validatePassword(req: Validator<string>): string | undefined {
-  return validateInput({ ...req, match: true, name: "Password" });
-}
-
 export function validateMessage(req: Validator<string>): string | undefined {
   return validateInput({
     ...req,
@@ -58,4 +54,8 @@ export function validateInput<T>(req: ValidateInputReq<T>) {
 
 export function notEmpty<T>(value?: T | null): value is T {
   return value != null;
+}
+
+export function validatePassword(req: Validator<string>): string | undefined {
+  return validateInput({ ...req, match: true, name: "Password" });
 }

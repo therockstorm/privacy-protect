@@ -6,7 +6,7 @@ import {
   type WithIvSalt,
   type WithSecretType,
 } from "./constants.js";
-import { bytesToHexStr } from "./mapper.js";
+import { bytesToHexStr } from "./mappers.js";
 
 type TemplateSecretReq = Readonly<{
   css: string;

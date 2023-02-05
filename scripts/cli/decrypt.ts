@@ -6,13 +6,13 @@ import {
   arrayBufToStr,
   hexStrToBytes,
   toFileName,
-} from "../../src/lib/mapper.js";
+} from "../../src/lib/mappers.js";
 import type { Config } from "../../src/lib/template-secret.js";
 import {
   notEmpty,
   validateFile,
   validatePassword,
-} from "../../src/lib/validate.js";
+} from "../../src/lib/validators.js";
 import { hiddenQuestion } from "./hidden-question.js";
 import { type Parsed, USAGE } from "./parse.js";
 

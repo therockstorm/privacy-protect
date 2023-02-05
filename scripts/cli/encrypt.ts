@@ -12,13 +12,13 @@ import {
   type WithSecretType,
 } from "../../src/lib/constants.js";
 import { encryptBySecretType } from "../../src/lib/encrypt.js";
+import { toUint8Array } from "../../src/lib/mappers.js";
 import { getFileName, templateSecret } from "../../src/lib/template-secret.js";
-import { toUint8Array } from "../../src/lib/to-array.js";
 import {
   validateFile,
   validateMessage,
   validatePassword,
-} from "../../src/lib/validate.js";
+} from "../../src/lib/validators.js";
 import { hiddenQuestion } from "./hidden-question.js";
 import { type Parsed, USAGE } from "./parse.js";
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { toId } from "$lib/to-id";
+  import { toId } from "$lib/mappers.js";
 
   export let label: string;
   export let group: string;
