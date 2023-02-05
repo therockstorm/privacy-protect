@@ -1,6 +1,7 @@
-import { decrypt } from "./decrypt.js";
+import { decrypt, type DecryptRes } from "./decrypt.js";
 import { arrayBufToStr, hexStrToBytes, toFileName } from "./mapper.js";
 import type { Config } from "./template-secret.js";
+import { notEmpty } from "./validate.js";
 
 const CONFIG: Config = `{.CONFIG}` as unknown as Config;
 const CLS = {
@@ -59,20 +60,22 @@ export async function revealSecret(e?: Event) {
   if (pw.length == 0) return;
   if (e != null) e.preventDefault();
 
-  let plainText;
+  let res: DecryptRes;
   try {
     setLoading(true);
-    const params = [CONFIG.cipherText, CONFIG.iv, CONFIG.salt].map(
-      hexStrToBytes
-    );
-    plainText = await decrypt({
-      ...CONFIG,
-      cipherText: params[0],
-      iv: params[1],
-      password: pw,
-      salt: params[2],
-      subtle: window.crypto.subtle,
-    });
+    res = (
+      await decrypt({
+        ...CONFIG,
+        payloads: CONFIG.payloads.map((p) => ({
+          ...p,
+          cipherText: hexStrToBytes(p.cipherText),
+          iv: hexStrToBytes(p.iv),
+          password: pw,
+          salt: hexStrToBytes(p.salt),
+        })),
+        subtle: window.crypto.subtle,
+      })
+    ).filter((r) => notEmpty(r.cipherText))[0];
     els.pw.value = "";
   } catch (error) {
     inputError(els.pw, els.pwError, "Password invalid.");
@@ -81,13 +84,15 @@ export async function revealSecret(e?: Event) {
     setLoading(false);
   }
 
-  if (CONFIG.secretType == "Message") {
-    els.message.innerHTML = arrayBufToStr(plainText);
-  } else if (CONFIG.secretType == "File") {
+  if (!res || !res.cipherText) {
+    inputError(els.pw, els.pwError, "Password invalid.");
+  } else if (res.secretType == "Message") {
+    els.message.innerHTML = arrayBufToStr(res.cipherText);
+  } else if (res.secretType == "File") {
     els.message.classList.add(CLS.hidden);
 
-    const fn = toFileName(CONFIG.fileExtension);
-    const content = new Uint8Array(plainText).reduce(
+    const fn = toFileName(res.fileExtension);
+    const content = new Uint8Array(res.cipherText).reduce(
       (a, b) => a + String.fromCharCode(b),
       ""
     );
@@ -103,7 +108,7 @@ export async function revealSecret(e?: Event) {
       els.img.setAttribute("src", data);
       els.img.classList.remove(CLS.hidden);
     }
-  } else console.error(`Invalid secret type ${CONFIG.secretType}`);
+  } else console.error(`Invalid secret type ${res.secretType}`);
 }
 
 function setLoading(loading: boolean) {

@@ -8,7 +8,11 @@ import {
   toFileName,
 } from "../../src/lib/mapper.js";
 import type { Config } from "../../src/lib/template-secret.js";
-import { validateFile, validatePassword } from "../../src/lib/validate.js";
+import {
+  notEmpty,
+  validateFile,
+  validatePassword,
+} from "../../src/lib/validate.js";
 import { hiddenQuestion } from "./hidden-question.js";
 import { type Parsed, USAGE } from "./parse.js";
 
@@ -113,8 +117,4 @@ async function validate({ positionals, values }: Parsed): Promise<ValidateRes> {
   if (passwordError) return passwordError;
 
   return { config, password };
-}
-
-function notEmpty<T>(value?: T | null): value is T {
-  return value != null;
 }

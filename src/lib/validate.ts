@@ -43,20 +43,19 @@ export function validateFile(
     : undefined;
 }
 
-export function validateInput<T>({
-  lenient,
-  name,
-  match,
-  val,
-}: ValidateInputReq<T>) {
-  if (!match || (lenient && val == null)) return undefined;
+export function validateInput<T>(req: ValidateInputReq<T>) {
+  if (!req.match || (req.lenient && req.val == null)) return undefined;
   if (
-    val == null ||
-    (typeof val === "string" && val.trim() === "") ||
-    (Array.isArray(val) && val.length === 0)
+    req.val == null ||
+    (typeof req.val === "string" && req.val.trim() === "") ||
+    (Array.isArray(req.val) && req.val.length === 0)
   ) {
-    return `${name} required.`;
+    return `${req.name} required.`;
   }
 
   return undefined;
+}
+
+export function notEmpty<T>(value?: T | null): value is T {
+  return value != null;
 }

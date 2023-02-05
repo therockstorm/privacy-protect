@@ -8,7 +8,13 @@
   import Prose from "$components/Prose.svelte";
   import Well from "$components/Well.svelte";
   import { random } from "$lib/client/crypto";
-  import { ENCRYPTION_CONFIG, secretTypes, SECRET_TYPES } from "$lib/constants";
+  import {
+    ENCRYPTION_CONFIG,
+    SECRET_TYPES,
+    secretTypes,
+    type WithPassword,
+    type WithPlainText,
+  } from "$lib/constants";
   import { encryptBySecretType } from "$lib/encrypt";
   import { SITE_TITLE, SITE_URL } from "$lib/seo";
   import { getFileName, templateSecret } from "$lib/template-secret";
@@ -29,11 +35,9 @@
   const desc =
     "Securely share secrets and WiFi passwords over text messages, send end-to-end encrypted emails, or store password-protected files on USB and cloud drives.";
 
-  type Validated = Readonly<{
-    fileExtension?: string;
-    password: string;
-    plainText: ArrayBufferView | ArrayBuffer;
-  }>;
+  type Validated = WithPassword &
+    WithPlainText &
+    Readonly<{ fileExtension?: string }>;
 
   type ValidateFormRes = boolean | Validated;
 
@@ -74,12 +78,19 @@
 
     const { keyLen } = ENCRYPTION_CONFIG;
     const args = { iv: random(keyLen), salt: random(keyLen), secretType };
-    const encryptRes = await encryptBySecretType({
+    const payloads = await encryptBySecretType({
       payloads: [{ ...validated, ...args }],
       subtle: window.crypto.subtle,
     });
     downloadHtml(
-      templateSecret({ ...encryptRes[0], ...args, css, html, js, passwordHint })
+      templateSecret({
+        ...args,
+        css,
+        html,
+        js,
+        passwordHint,
+        payloads,
+      })
     );
 
     loading = false;
