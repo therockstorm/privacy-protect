@@ -7,7 +7,6 @@
   import TextArea from "$components/inputs/TextArea.svelte";
   import Prose from "$components/Prose.svelte";
   import Well from "$components/Well.svelte";
-  import { random } from "$lib/client/crypto.js";
   import {
     ENCRYPTION_CONFIG,
     SECRET_TYPES,
@@ -16,7 +15,6 @@
     type WithPlainText,
   } from "$lib/constants.js";
   import { encryptBySecretType } from "$lib/encrypt.js";
-  import { toUint8Array } from "$lib/mappers.js";
   import { SITE_TITLE, SITE_URL } from "$lib/seo.js";
   import { getFileName, templateSecret } from "$lib/template-secret.js";
   import {
@@ -111,14 +109,14 @@
     passwordError = validatePassword({ lenient, secretType, val: password });
     if (fileError || messageError || passwordError) return false;
 
-    password = password ?? "";
+    const pw = password ?? "";
     return secretType === SECRET_TYPES.file && files != null
       ? {
           fileExtension: files[0].name.split(".").pop(),
-          password,
+          password: pw,
           plainText: await files[0].arrayBuffer(),
         }
-      : { password, plainText: toUint8Array(message) };
+      : { password: pw, plainText: message ?? "" };
   }
 
   function downloadHtml(secretHtml: string) {
@@ -136,6 +134,10 @@
     message = undefined;
     password = null;
     passwordHint = "";
+  }
+
+  function random(length: number): Uint8Array {
+    return window.crypto.getRandomValues(new Uint8Array(length));
   }
 </script>
 

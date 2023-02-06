@@ -21,7 +21,7 @@
 
 <main>
   <Prose className="mt-12">
-    <h2>Enterprise-grade Security</h2>
+    <h1>Enterprise-grade Security</h1>
     <p>
       Your secret is safe; <strong>it never leaves your device</strong>. No data
       transfers to or from PrivacyProtect servers after the initial page load.
@@ -29,16 +29,17 @@
       revealing your secret still works.
     </p>
     <p>
-      For encryption, PrivacyProtect uses <a
+      For encryption, PrivacyProtect uses native browser <a
         href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API"
-        >native browser APIs</a
+        >W3C Web Cryptography APIs</a
       >
       with no external dependencies.
       <a
         href="https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/deriveKey#parameters"
         >Argon2 doesn't have browser support</a
-      >. So to derive a key from the entered password, PrivacyProtect uses
-      PBKDF2 with 2,100,000 iterations, a random salt, and the SHA-512 hash,
+      >. So to derive a non-extractable 32-byte key from the entered password,
+      PrivacyProtect uses PBKDF2 with 2,100,000 iterations, a 32-byte random
+      salt, and the SHA-512 hash,
       <a
         href="https://soatok.blog/2022/12/29/what-we-do-in-the-etc-shadow-cryptography-with-passwords/"
         >as recommended here</a
@@ -47,7 +48,7 @@
         href="https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#pbkdf2"
         >OWASP-recommended</a
       >
-      210,000. This is justified in light of the recent
+      210,000. This is justified in light of the December 2022
       <a
         href="https://blog.lastpass.com/2022/12/notice-of-recent-security-incident/"
         >LastPass breach</a
@@ -63,9 +64,9 @@
       <a href="https://csrc.nist.gov/publications/detail/sp/800-38d/final"
         >NIST-recommended</a
       >
-      GCM block cipher mode using the derived key and a random initialization vector.
-      The HTML file contains the resulting ciphertext, initialization vector, and
-      salt needed for decryption.
+      GCM block cipher mode using the derived key and a 32-byte random initialization
+      vector. The HTML file contains the resulting ciphertext, initialization vector,
+      and salt needed for decryption.
     </p>
     <p>
       The code is <a href="https://github.com/therockstorm/privacy-protect"

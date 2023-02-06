@@ -1,13 +1,13 @@
 import type {
+  CipherPayload,
   EncryptionConfig,
   WithCipherText,
-  WithIvSalt,
   WithPassword,
   WithSecretType,
   WithSubtle,
 } from "./constants.js";
 
-type Payload = WithCipherText & WithIvSalt & WithPassword & WithSecretType;
+type Payload = CipherPayload & WithPassword;
 
 type DecryptReq = EncryptionConfig &
   WithSubtle &

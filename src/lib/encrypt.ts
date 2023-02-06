@@ -1,6 +1,7 @@
 import {
   type CipherPayload,
   ENCRYPTION_CONFIG,
+  isString,
   SECRET_TYPES,
   type WithIvSalt,
   type WithPassword,
@@ -8,7 +9,6 @@ import {
   type WithSecretType,
   type WithSubtle,
 } from "./constants.js";
-import { toUint8Array } from "./mappers.js";
 
 type Payload = WithIvSalt & WithPassword & WithPlainText & WithSecretType;
 
@@ -61,5 +61,10 @@ async function encryptOne({
     false,
     ["encrypt"]
   );
-  return subtle.encrypt({ iv, name: aesGcm }, derivedKey, plainText);
+  const data = isString(plainText) ? toUint8Array(plainText) : plainText;
+  return subtle.encrypt({ iv, name: aesGcm }, derivedKey, data);
+}
+
+function toUint8Array(val?: string): Uint8Array {
+  return new TextEncoder().encode(val);
 }

@@ -32,7 +32,7 @@
 
   // src/lib/decrypt.ts
   function decrypt(req) {
-    const config = {
+    const config2 = {
       encryptionAlgo: req.encryptionAlgo,
       hash: req.hash,
       iterations: req.iterations,
@@ -43,7 +43,7 @@
       req.payloads.map(async (payload) => {
         let cipherText;
         try {
-          cipherText = await decryptOne(__spreadProps(__spreadValues({}, config), {
+          cipherText = await decryptOne(__spreadProps(__spreadValues({}, config2), {
             payload,
             subtle: req.subtle
           }));
@@ -90,13 +90,6 @@
   function arrayBufToStr(buf) {
     return new TextDecoder().decode(buf);
   }
-  function hexStrToBytes(hex) {
-    const bytes = [];
-    for (let c = 0; c < hex.length; c += 2) {
-      bytes.push(parseInt(hex.substring(c, c + 2), 16));
-    }
-    return Uint8Array.from(bytes);
-  }
   function toFileName(fileExtension) {
     const fe = fileExtension != null ? fileExtension : "";
     const ext = fe ? `.${fe}` : "";
@@ -110,6 +103,37 @@
   // src/lib/constants.ts
   var SECRET_TYPES = { message: "Message", file: "File" };
   var secretTypes = Object.values(SECRET_TYPES);
+  function isString(val) {
+    return typeof val === "string" || val instanceof String;
+  }
+
+  // src/lib/template-secret.ts
+  function strToConfig(payload) {
+    try {
+      if (!payload)
+        return void 0;
+      const config2 = isString(payload) ? JSON.parse(payload) : payload;
+      return __spreadProps(__spreadValues({}, config2), {
+        payloads: config2.payloads.map(payloadToCipherPayload)
+      });
+    } catch (error) {
+      return void 0;
+    }
+  }
+  function payloadToCipherPayload(payload) {
+    return __spreadProps(__spreadValues({}, payload), {
+      cipherText: hexStrToBytes(payload.cipherText),
+      iv: hexStrToBytes(payload.iv),
+      salt: hexStrToBytes(payload.salt)
+    });
+  }
+  function hexStrToBytes(hex) {
+    const bytes = [];
+    for (let c = 0; c < hex.length; c += 2) {
+      bytes.push(parseInt(hex.substring(c, c + 2), 16));
+    }
+    return Uint8Array.from(bytes);
+  }
 
   // src/lib/validators.ts
   function notEmpty(value) {
@@ -117,7 +141,7 @@
   }
 
   // src/lib/template.ts
-  var CONFIG = {"encryptionAlgo":"AES-GCM","hash":"SHA-512","iterations":2100000,"keyDerivationAlgo":"PBKDF2","keyLen":32,"passwordHint":"Three letters, all lowercase: an animal, commonly a pet, that barks.\n\n(Please use stronger passwords for your secrets!)","payloads":[{"cipherText":"d81daeaf7bc1b1bd5c0b2342fb3c6f1335bf838cb3913732a99330a473a2d69c9b2619ed806fddf0860be3a94499a53b922fed16b21c256838b71169c30bb8ad6add837d1bb06b3f50feb836ad8b90a717315045a9b7c3213584482338468988260610999fe7d2c7363e07f1f0a27372aa3b25f6e390c744e58d64fca2c84e19f2885fd4db37b873388cdffbc0d25adb806d90a32a5b892e13b6f843db6d","iv":"07c634e46d0e4343ad7b355aeb6cd5bd25e854441a8f7aad1d0682f7efebb7df","salt":"78caa20bb6b1c1a009724a7d2f0f56826bf3b5943407c19ee7dac1fe3c9d294e","secretType":"Message"}]};
+  var CONFIG = {"encryptionAlgo":"AES-GCM","hash":"SHA-512","iterations":2100000,"keyDerivationAlgo":"PBKDF2","keyLen":32,"passwordHint":"Three letters, all lowercase: an animal, commonly a pet, that barks.\n\n(Please use stronger passwords for your secrets!)","payloads":[{"cipherText":"2c912c756bbf478de9bdb439670abb06707bb33830f141f318bb0dd7781ea4ec4041b9da11e23b2bc7398e798bb61997b7d681506f9ade7b6f985c638f20a0920e41ffa8b270295bf8239120066a6f1c09ab8bb3ce0fddc640ee46a46b4d2fae91498f172817a8e85c0a4876bb7812d407fa1412c17e92814393e120d3c74918c5a837c81b95405927585742f9f8953262a2398a07aae08b1431681ae27c","iv":"0bfaae5175e37d475eb537b00d976220b8351184c061f908219727b88ac646e7","salt":"a00501ed34e9afe8e67e731fe11713c896159a2929ecb2951ec4de846b64164d","secretType":"Message"}]};
   var CLS = {
     animate: "animate-pulse",
     hidden: "hidden",
@@ -138,12 +162,14 @@
   };
   var els = ELS;
   var showPassword = false;
+  var config;
   function init() {
+    config = strToConfig(CONFIG);
     Object.keys(ELS).forEach((k) => {
       ELS[k] = document.getElementById(k);
     });
-    if (CONFIG.passwordHint)
-      els.pwHint.innerHTML = CONFIG.passwordHint;
+    if (config.passwordHint)
+      els.pwHint.innerHTML = config.passwordHint;
     else
       els.pwHintDiv.classList.add(CLS.hidden);
     els.pw.addEventListener("keyup", (event) => {
@@ -175,13 +201,8 @@
     let res;
     try {
       setLoading(true);
-      res = (await decrypt(__spreadProps(__spreadValues({}, CONFIG), {
-        payloads: CONFIG.payloads.map((p) => __spreadProps(__spreadValues({}, p), {
-          cipherText: hexStrToBytes(p.cipherText),
-          iv: hexStrToBytes(p.iv),
-          password: pw,
-          salt: hexStrToBytes(p.salt)
-        })),
+      res = (await decrypt(__spreadProps(__spreadValues({}, config), {
+        payloads: config.payloads.map((p) => __spreadProps(__spreadValues({}, p), { password: pw })),
         subtle: window.crypto.subtle
       }))).filter((r) => notEmpty(r.cipherText))[0];
       els.pw.value = "";

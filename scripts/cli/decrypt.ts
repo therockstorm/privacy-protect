@@ -1,13 +1,10 @@
 import { webcrypto } from "crypto";
 import { promises as fs, writeFileSync } from "fs";
 
+import type { WithPassword } from "../../src/lib/constants.js";
 import { decrypt, type DecryptRes } from "../../src/lib/decrypt.js";
-import {
-  arrayBufToStr,
-  hexStrToBytes,
-  toFileName,
-} from "../../src/lib/mappers.js";
-import type { Config } from "../../src/lib/template-secret.js";
+import { arrayBufToStr, toFileName } from "../../src/lib/mappers.js";
+import { type Config, strToConfig } from "../../src/lib/template-secret.js";
 import {
   notEmpty,
   validateFile,
@@ -18,7 +15,7 @@ import { type Parsed, USAGE } from "./parse.js";
 
 const DECRYPT_REGEX = /^ {2}var CONFIG = ({.+})?;$/m;
 
-type ValidateRes = string | Readonly<{ config: Config; password: string }>;
+type ValidateRes = string | (WithPassword & Readonly<{ config: Config }>);
 
 export async function decryptCli(req: Parsed) {
   const validated = await validate(req);
@@ -34,13 +31,7 @@ export async function decryptCli(req: Parsed) {
     res = (
       await decrypt({
         ...config,
-        payloads: config.payloads.map((p) => ({
-          ...p,
-          cipherText: hexStrToBytes(p.cipherText),
-          iv: hexStrToBytes(p.iv),
-          password,
-          salt: hexStrToBytes(p.salt),
-        })),
+        payloads: config.payloads.map((p) => ({ ...p, password })),
         subtle: webcrypto.subtle,
       })
     ).filter((r) => notEmpty(r.cipherText))[0];
@@ -88,14 +79,8 @@ async function validate({ positionals, values }: Parsed): Promise<ValidateRes> {
   const matches = DECRYPT_REGEX.exec(await fs.readFile(file ?? "", "utf-8"));
 
   const UNSUPPORTED = `File '${file}' is an unsupported format.`;
-  let config: Config | undefined;
-  try {
-    const c = matches?.[1];
-    if (!c) errors.push(UNSUPPORTED);
-    else config = JSON.parse(c);
-  } catch (error) {
-    errors.push(UNSUPPORTED);
-  }
+  const config = strToConfig(matches?.[1]);
+  if (config == null) errors.push(UNSUPPORTED);
 
   const error = errors.filter((error) => error != null).join("\n");
   if (error || config == null) return error;

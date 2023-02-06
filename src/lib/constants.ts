@@ -21,7 +21,9 @@ export type WithIvSalt<T = Uint8Array> = Readonly<{ iv: T; salt: T }>;
 
 export type WithPassword = Readonly<{ password: string }>;
 
-export type WithPlainText = Readonly<{ plainText: ArrayBuffer }>;
+export type WithPlainText = Readonly<{
+  plainText: ArrayBuffer | string;
+}>;
 
 export type WithSecretType = Readonly<{
   fileExtension?: string;
@@ -32,6 +34,6 @@ export type WithSubtle = Readonly<{ subtle: SubtleCrypto }>;
 
 export type CipherPayload = WithCipherText & WithIvSalt & WithSecretType;
 
-export type CipherStringPayload = WithCipherText<string> &
-  WithIvSalt &
-  WithSecretType;
+export function isString(val: unknown): val is string {
+  return typeof val === "string" || val instanceof String;
+}

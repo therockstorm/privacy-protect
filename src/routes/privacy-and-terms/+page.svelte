@@ -21,7 +21,7 @@
 
 <main>
   <Prose className="mt-12">
-    <h2>Privacy policy</h2>
+    <h1>Privacy policy</h1>
     <small>Updated 2023-01-25</small>
     <p>
       PrivacyProtect uses{" "}
@@ -31,7 +31,7 @@
       for privacy-focused website usage. We don
       {"'"}t collect or track anything else. Privacy is important.
     </p>
-    <h2>Terms of service</h2>
+    <h1>Terms of service</h1>
     <small>Updated 2023-01-25</small>
     <p>
       Please read these terms of service ("terms") carefully before using

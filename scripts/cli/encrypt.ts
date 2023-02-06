@@ -13,7 +13,6 @@ import {
   type WithSecretType,
 } from "../../src/lib/constants.js";
 import { encryptBySecretType } from "../../src/lib/encrypt.js";
-import { toUint8Array } from "../../src/lib/mappers.js";
 import { getFileName, templateSecret } from "../../src/lib/template-secret.js";
 import {
   validateFile,
@@ -151,7 +150,7 @@ async function validate({ positionals, values }: Parsed): Promise<ValidateRes> {
       ? [
           {
             password: deniablePw,
-            plainText: toUint8Array(deniableMessage),
+            plainText: deniableMessage,
             secretType: "Message",
           },
         ]
@@ -174,7 +173,11 @@ async function validate({ positionals, values }: Parsed): Promise<ValidateRes> {
         ...res,
         payloads: [
           ...payloads,
-          { password: pw, plainText: toUint8Array(message), secretType },
+          {
+            password: pw,
+            plainText: message ?? "",
+            secretType,
+          },
         ],
       };
 }

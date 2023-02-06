@@ -1,9 +1,11 @@
 import adapter from "@sveltejs/adapter-vercel";
 import { vitePreprocess } from "@sveltejs/kit/vite";
+import { mdsvex } from "mdsvex";
 import { resolve } from "path";
 
 /** @type {import('@sveltejs/kit').Config} */
 export default {
+  extensions: [".md", ".svelte"],
   kit: {
     adapter: adapter(),
     alias: {
@@ -25,5 +27,13 @@ export default {
       mode: "auto",
     },
   },
-  preprocess: vitePreprocess(),
+  preprocess: [
+    mdsvex({
+      extensions: [".md"],
+      layout: {
+        blog: "src/routes/blog/post.svelte",
+      },
+    }),
+    vitePreprocess(),
+  ],
 };

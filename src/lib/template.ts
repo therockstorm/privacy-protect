@@ -1,9 +1,9 @@
 import { decrypt, type DecryptRes } from "./decrypt.js";
-import { arrayBufToStr, hexStrToBytes, toFileName } from "./mappers.js";
-import type { Config } from "./template-secret.js";
+import { arrayBufToStr, toFileName } from "./mappers.js";
+import { type Config, strToConfig } from "./template-secret.js";
 import { notEmpty } from "./validators.js";
 
-const CONFIG: Config = `{.CONFIG}` as unknown as Config;
+const CONFIG = `{.CONFIG}`;
 const CLS = {
   animate: "animate-pulse",
   hidden: "hidden",
@@ -24,13 +24,15 @@ const ELS: Record<string, HTMLElement | null> = {
 };
 const els = ELS as Record<string, HTMLInputElement>;
 let showPassword = false;
+let config: Config;
 
 export function init() {
+  config = strToConfig(CONFIG) as Config;
   Object.keys(ELS).forEach((k) => {
     ELS[k] = document.getElementById(k);
   });
 
-  if (CONFIG.passwordHint) els.pwHint.innerHTML = CONFIG.passwordHint;
+  if (config.passwordHint) els.pwHint.innerHTML = config.passwordHint;
   else els.pwHintDiv.classList.add(CLS.hidden);
 
   els.pw.addEventListener("keyup", (event) => {
@@ -65,14 +67,8 @@ export async function revealSecret(e?: Event) {
     setLoading(true);
     res = (
       await decrypt({
-        ...CONFIG,
-        payloads: CONFIG.payloads.map((p) => ({
-          ...p,
-          cipherText: hexStrToBytes(p.cipherText),
-          iv: hexStrToBytes(p.iv),
-          password: pw,
-          salt: hexStrToBytes(p.salt),
-        })),
+        ...config,
+        payloads: config.payloads.map((p) => ({ ...p, password: pw })),
         subtle: window.crypto.subtle,
       })
     ).filter((r) => notEmpty(r.cipherText))[0];
