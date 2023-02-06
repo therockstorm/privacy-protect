@@ -9,7 +9,7 @@
 
 Securely share and store passwords and sensitive files using only web browser crypto APIs. Available at [privacyprotect.dev](https://www.privacyprotect.dev/?utm_source=github&utm_medium=social&utm_content=readme).
 
-See the [launch blog](https://www.rocky.dev/blog/introducing-privacyprotect?utm_source=github&utm_medium=social&utm_campaign=blog&utm_content=readme) for details.
+See the [launch blog](https://www.privacyprotect.dev/blog/introducing-privacyprotect?utm_source=github&utm_medium=social&utm_campaign=blog&utm_content=readme) for details.
 
 ## Table of Contents
 

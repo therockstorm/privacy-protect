@@ -157,10 +157,7 @@
       Securely share passwords and sensitive files over email or store them in
       insecure locations like cloud drives. No special software or account—just
       a desktop or mobile web browser like Chrome or Safari. See the
-      <a
-        href="https://www.rocky.dev/blog/introducing-privacyprotect?utm_source=privacyprotect&utm_medium=web&utm_campaign=blog&utm_content=header"
-        >launch blog</a
-      > for details.
+      <a href="/blog/introducing-privacyprotect">launch blog</a> for details.
     </p>
     <p>
       Your secret is safe; <strong>it never leaves your device</strong>.

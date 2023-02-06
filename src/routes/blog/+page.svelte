@@ -25,7 +25,7 @@
 </svelte:head>
 
 <main>
-  <Prose className="mt-12">
+  <Prose className="my-12">
     <h1>Blog</h1>
 
     <div class="not-prose flex max-w-3xl flex-col space-y-16">

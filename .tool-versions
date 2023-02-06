@@ -1,2 +1,3 @@
 # Vercel ignores this, set it in project settings for deploys
-nodejs 18.13.0
+
+nodejs 18.14.0

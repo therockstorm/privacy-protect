@@ -7,10 +7,7 @@
       href: "https://github.com/therockstorm/privacy-protect",
       text: "GitHub",
     },
-    {
-      href: "https://www.rocky.dev",
-      text: "rocky.dev",
-    },
+    { href: "/blog", text: "Blog" },
   ];
   const date = new Date().getFullYear();
 </script>

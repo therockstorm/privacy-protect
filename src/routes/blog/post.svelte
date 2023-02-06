@@ -25,7 +25,7 @@
   <meta property="og:url" content={url} />
 </svelte:head>
 
-<article class="mt-12">
+<article class="my-12">
   <header class="flex flex-col">
     <h1 class="mt-6 text-4xl text-zinc-800 sm:text-5xl">
       {title}

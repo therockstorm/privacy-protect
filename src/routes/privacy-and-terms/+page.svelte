@@ -20,7 +20,7 @@
 </svelte:head>
 
 <main>
-  <Prose className="mt-12">
+  <Prose className="my-12">
     <h1>Privacy policy</h1>
     <small>Updated 2023-01-25</small>
     <p>

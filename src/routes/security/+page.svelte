@@ -20,7 +20,7 @@
 </svelte:head>
 
 <main>
-  <Prose className="mt-12">
+  <Prose className="my-12">
     <h1>Enterprise-grade Security</h1>
     <p>
       Your secret is safe; <strong>it never leaves your device</strong>. No data
