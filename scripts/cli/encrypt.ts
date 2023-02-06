@@ -1,5 +1,5 @@
 import { webcrypto } from "crypto";
-import { promises as fs, Stats, writeFileSync } from "fs";
+import { promises as fs, writeFileSync } from "fs";
 import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
@@ -7,6 +7,7 @@ import {
   ENCRYPTION_CONFIG,
   SECRET_TYPES,
   type SecretType,
+  type ValueOf,
   type WithPassword,
   type WithPlainText,
   type WithSecretType,
@@ -30,13 +31,20 @@ const ASSET_DIR = join(
   "assets"
 );
 
+const OUT_TYPE = {
+  directory: "directory",
+  file: "file",
+  invalid: "invalid",
+} as const;
+type OutType = ValueOf<typeof OUT_TYPE>;
+
 type Payload = WithPassword & WithPlainText & WithSecretType;
 
 type ValidateRes =
   | string
   | Readonly<{
       hint: string | undefined;
-      out: Readonly<{ isFile: boolean; path: string }>;
+      out: Readonly<{ path: string; type: OutType }>;
       payloads: readonly Payload[];
     }>;
 
@@ -63,7 +71,8 @@ export async function encryptCli(req: Parsed) {
     subtle: webcrypto.subtle,
   });
 
-  const file = out.isFile ? out.path : join(out.path, getFileName());
+  const file =
+    out.type === OUT_TYPE.file ? out.path : join(out.path, getFileName());
   writeFileSync(
     file,
     templateSecret({
@@ -82,14 +91,14 @@ async function validate({ positionals, values }: Parsed): Promise<ValidateRes> {
   if (positionals.length !== 2 || values.help) return USAGE.encrypt;
 
   const errors: (string | undefined)[] = [];
-  const [, out] = positionals;
+  const [, outPath] = positionals;
   const { deniableMessage, file, hint, message, password } = values;
   const secretType: SecretType = file ? "File" : "Message";
 
   const lenient = false;
-  const outStat = await stat(out);
-  if (outStat == null || (!outStat.isFile() && !outStat.isDirectory())) {
-    errors.push(`Output '${out}' not found.`);
+  const outType = await validatePath(outPath);
+  if (outType == OUT_TYPE.invalid) {
+    errors.push(`Output '${outPath}' not found.`);
   }
   if ((!file && !message) || (file && message)) {
     errors.push(`Either --file or --message option required, but not both.`);
@@ -128,7 +137,6 @@ async function validate({ positionals, values }: Parsed): Promise<ValidateRes> {
 
   let deniablePw: string | undefined;
   if (deniableMessage) {
-    console.log("ROCKY", deniableMessage);
     deniablePw = await hiddenQuestion("Deniable password: ");
     const deniablePwError = validatePassword({
       lenient,
@@ -148,8 +156,7 @@ async function validate({ positionals, values }: Parsed): Promise<ValidateRes> {
           },
         ]
       : [];
-  const res = { hint, out: { isFile: outStat?.isFile() ?? false, path: out } };
-
+  const res = { hint, out: { path: outPath, type: outType } };
   return secretType === SECRET_TYPES.file && file != null
     ? {
         ...res,
@@ -172,11 +179,21 @@ async function validate({ positionals, values }: Parsed): Promise<ValidateRes> {
       };
 }
 
-async function stat(path: string): Promise<Stats | undefined> {
+async function validatePath(path: string): Promise<OutType> {
   try {
-    return await fs.lstat(path);
+    try {
+      const stat = await fs.lstat(path);
+      return stat.isFile()
+        ? OUT_TYPE.file
+        : stat.isDirectory()
+        ? OUT_TYPE.directory
+        : OUT_TYPE.invalid;
+    } catch {
+      const stat = await fs.lstat(dirname(path));
+      return stat.isDirectory() ? OUT_TYPE.file : OUT_TYPE.invalid;
+    }
   } catch {
-    return undefined;
+    return OUT_TYPE.invalid;
   }
 }
 

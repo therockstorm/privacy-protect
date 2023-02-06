@@ -13,6 +13,8 @@ export type SecretType = (typeof secretTypes)[number];
 
 export type EncryptionConfig = typeof ENCRYPTION_CONFIG;
 
+export type ValueOf<T> = T[keyof T];
+
 export type WithCipherText<T = ArrayBuffer> = Readonly<{ cipherText: T }>;
 
 export type WithIvSalt<T = Uint8Array> = Readonly<{ iv: T; salt: T }>;

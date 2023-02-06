@@ -12,6 +12,9 @@ Options:
   --password, -p    Password used to reveal your secret. Provided as a
                     convenience to allow for scripting. If not provided as an
                     option, the CLI will prompt for it and hide typed characters.
+
+Examples:
+  ./cli.ts decrypt ./out/secret.html
 `,
   encrypt: `
 Usage: ./cli encrypt [OPTIONS] [--file OR --message] [OUT]
@@ -31,6 +34,9 @@ Options:
                     for a second password. Entering this password while under
                     duress will reveal the deniableMessage instead of the
                     --message or --file.
+
+Examples:
+  ./cli.ts encrypt -m "My secret" --hint "My hint" ./out/secret.html
 `,
   global: `
 Usage: ./cli [OPTIONS] [COMMAND] [ARG...]
@@ -39,8 +45,9 @@ Options:
   --help, -h        Print usage.
 
 Commands:
-  decrypt           Decrypt a file.
-  encrypt           Encrypt a file or message.
+  decrypt           Decrypt a PrivacyProtect HTML file.
+  encrypt           Encrypt a file or message, creating a PrivacyProtect HTML
+                    file.
 `,
 };
 

@@ -15,6 +15,7 @@ See the [launch blog](https://www.rocky.dev/blog/introducing-privacyprotect?utm_
 
 - [Security](#security)
 - [Usage](#usage)
+- [CLI](#cli)
 - [Acknowledgements](#acknowledgements)
 - [Contributing](#contributing)
 - [License](#lincense)
@@ -45,17 +46,49 @@ npm run dev -- --open
 npm run watch:template
 ```
 
-### CLI
+## CLI
+
+### Encrypt
 
 ```bash
-# Show global help
-./cli.ts -h
+Usage: ./cli encrypt [OPTIONS] [--file OR --message] [OUT]
 
-# Show help for a command (e.g. encrypt)
-./cli.ts encrypt -h
+Encrypt a file or message, creating a PrivacyProtect HTML file.
 
-# Encrypt a file with optional hint (it prompts for password)
-./cli.ts encrypt -m "My secret" --hint "My hint" ./out
+Options:
+  --help, -h        Print usage.
+
+  --file, -f        Path to secret file to conceal.
+  --hint            Password hint.
+  --message, -m     Secret message to conceal.
+  --password, -p    Password used to conceal your secret. Provided as a
+                    convenience to allow for scripting. If not provided as an
+                    option, the CLI will prompt for it and hide typed characters.
+  --deniableMessage Secret message to conceal. If provided, the CLI will prompt
+                    for a second password. Entering this password while under
+                    duress will reveal the deniableMessage instead of the
+                    --message or --file.
+
+Examples:
+  ./cli.ts encrypt -m "My secret" --hint "My hint" ./out/secret.html
+```
+
+### Decrypt
+
+```bash
+Usage: ./cli decrypt [OPTIONS] [FILE]
+
+Decrypt a PrivacyProtect HTML file.
+
+Options:
+  --help, -h        Print usage.
+  --file, -f        Path to PrivacyProtect HTML file containing secret to reveal.
+  --password, -p    Password used to reveal your secret. Provided as a
+                    convenience to allow for scripting. If not provided as an
+                    option, the CLI will prompt for it and hide typed characters.
+
+Examples:
+  ./cli.ts decrypt ./out/secret.html
 ```
 
 ## Acknowledgements
