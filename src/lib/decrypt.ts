@@ -40,7 +40,6 @@ export function decrypt(req: DecryptReq): Promise<DecryptRes[]> {
         });
       } catch (error) {
         // Ignore
-        console.log("Failed decrypting", error);
       }
       return {
         cipherText,

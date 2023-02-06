@@ -11,18 +11,16 @@ import {
   validatePassword,
 } from "../../src/lib/validators.js";
 import { hiddenQuestion } from "./hidden-question.js";
-import { type Parsed, USAGE } from "./parse.js";
+import { exitWithError, type Parsed, USAGE } from "./parse.js";
 
 const DECRYPT_REGEX = /^ {2}var CONFIG = ({.+})?;$/m;
+const PASSWORD_INVALID = "Password invalid.";
 
 type ValidateRes = string | (WithPassword & Readonly<{ config: Config }>);
 
 export async function decryptCli(req: Parsed) {
   const validated = await validate(req);
-  if (typeof validated === "string") {
-    console.error(validated);
-    process.exit(1);
-  }
+  if (typeof validated === "string") exitWithError(validated);
 
   const { config, password } = validated;
   let res: DecryptRes;
@@ -36,11 +34,10 @@ export async function decryptCli(req: Parsed) {
       })
     ).filter((r) => notEmpty(r.cipherText))[0];
   } catch (error) {
-    console.error("Password invalid.");
-    process.exit(1);
+    exitWithError(PASSWORD_INVALID);
   }
 
-  if (!res || !res.cipherText) throw new Error("Invalid password.");
+  if (!res || !res.cipherText) exitWithError(PASSWORD_INVALID);
   if (res.secretType == "Message") {
     console.log(arrayBufToStr(res.cipherText));
   } else if (res.secretType == "File") {

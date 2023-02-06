@@ -20,7 +20,7 @@ import {
   validatePassword,
 } from "../../src/lib/validators.js";
 import { hiddenQuestion } from "./hidden-question.js";
-import { type Parsed, USAGE } from "./parse.js";
+import { exitWithError, type Parsed, USAGE } from "./parse.js";
 
 const ASSET_DIR = join(
   dirname(fileURLToPath(import.meta.url)),
@@ -49,10 +49,7 @@ type ValidateRes =
 
 export async function encryptCli(req: Parsed) {
   const validated = await validate(req);
-  if (typeof validated === "string") {
-    console.error(validated);
-    process.exit(1);
-  }
+  if (typeof validated === "string") exitWithError(validated);
 
   const { hint, out, payloads } = validated;
   const [css, html, js] = await Promise.all(
@@ -186,11 +183,9 @@ async function validatePath(path: string): Promise<OutType> {
   try {
     try {
       const stat = await fs.lstat(path);
-      return stat.isFile()
-        ? OUT_TYPE.file
-        : stat.isDirectory()
-        ? OUT_TYPE.directory
-        : OUT_TYPE.invalid;
+      if (stat.isFile()) return OUT_TYPE.file;
+
+      return stat.isDirectory() ? OUT_TYPE.directory : OUT_TYPE.invalid;
     } catch {
       const stat = await fs.lstat(dirname(path));
       return stat.isDirectory() ? OUT_TYPE.file : OUT_TYPE.invalid;

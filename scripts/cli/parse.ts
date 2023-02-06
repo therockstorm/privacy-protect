@@ -77,7 +77,11 @@ export function parse(): Parsed {
       },
     });
   } catch (error) {
-    console.error(USAGE.global);
-    process.exit(1);
+    exitWithError(USAGE.global);
   }
+}
+
+export function exitWithError(error: string): never {
+  console.error(error);
+  process.exit(1);
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env npx ts-node
 import { decryptCli } from "./scripts/cli/decrypt.js";
 import { encryptCli } from "./scripts/cli/encrypt.js";
-import { parse, USAGE } from "./scripts/cli/parse.js";
+import { exitWithError, parse, USAGE } from "./scripts/cli/parse.js";
 
 async function cli() {
   const parsed = parse();
@@ -16,8 +16,7 @@ async function cli() {
       await decryptCli(parsed);
       break;
     default:
-      console.error(USAGE.global);
-      process.exit(1);
+      exitWithError(USAGE.global);
   }
 }
 
