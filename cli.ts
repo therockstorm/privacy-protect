@@ -1,4 +1,4 @@
-#!/usr/bin/env npx ts-node
+#!/usr/bin/env -S npx ts-node
 import { decryptCli } from "./scripts/cli/decrypt.js";
 import { encryptCli } from "./scripts/cli/encrypt.js";
 import { exitWithError, parse, USAGE } from "./scripts/cli/parse.js";
