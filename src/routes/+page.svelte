@@ -153,6 +153,7 @@
 
 <main>
   <Prose className="mb-2">
+    <h1 class="sr-only">PrivacyProtect</h1>
     <p>
       Securely share passwords and sensitive files over email or store them in
       insecure locations like cloud drives. No special software or account—just
@@ -191,6 +192,11 @@
         </li>
         <li>Click <strong>Reveal secret</strong>.</li>
       </ol>
+      Here are examples of a PrivacyProtected{" "}<a
+        href="/example-message.html">message</a
+      >
+      and <a href="/example-image.html">image file</a>. Try "dog" for the
+      password.
     </details>
   </Prose>
 

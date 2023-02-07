@@ -7,7 +7,7 @@
 
 <div class={small ? "flex justify-center text-center" : ""}>
   <figure class={small ? "max-w-xs" : ""}>
-    <img alt={alt ?? caption} {src} />
+    <img alt={alt || caption} {src} />
     {#if caption}
       <figcaption>{caption}</figcaption>
     {/if}

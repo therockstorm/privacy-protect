@@ -49,7 +49,7 @@
     "lint": "npm run check && prettier --plugin-search-dir . --check . && eslint .",
     "prepare": "husky install && svelte-kit sync && npm run build:template",
     "preview": "vite preview",
-    "test": "npm run gen:examples",
+    "test:e2e": "npm run gen:examples",
     "watch:template": "npm run build:template:js -- --watch & npm run build:template:css -- --watch"
   }
 }
