@@ -16,9 +16,9 @@ EOM
   out_path="./privacyprotect.gif"
 
   ./cli.ts encrypt -m "$message" --hint "$hint" $message_path -p $password
-  sed -i '' 's|<!-- CANONICAL -->|<link rel="canonical" href="https://www.privacyprotect.dev/example-message.html" />|' $message_path
+  sed -i '' 's|<!-- CANONICAL -->|<meta property="og:url" content="https://www.privacyprotect.dev/example-message.html" />\n    <link rel="canonical" href="https://www.privacyprotect.dev/example-message.html" />|' $message_path
   ./cli.ts encrypt -f ./scripts/example.gif --hint "$hint" $image_path -p $password
-  sed -i '' 's|<!-- CANONICAL -->|<link rel="canonical" href="https://www.privacyprotect.dev/example-image.html" />|' $image_path
+  sed -i '' 's|<!-- CANONICAL -->|<meta property="og:url" content="https://www.privacyprotect.dev/example-image.html" />\n    <link rel="canonical" href="https://www.privacyprotect.dev/example-image.html" />|' $image_path
 
   ./cli.ts decrypt $message_path -p $password
   ./cli.ts decrypt $image_path -p $password
