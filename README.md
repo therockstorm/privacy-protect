@@ -1,15 +1,42 @@
+<h1 align="center">PrivacyProtect</h1>
+<p align="center">
+  End-to-end encryption without special software or accounts; only native web browser crypto APIs.
+</p>
+<h4 align="center">
+  <a href="https://www.privacyprotect.dev/">Website</a> | <a href="https://www.privacyprotect.dev/blog/introducing-privacyprotect?utm_source=github&utm_medium=social&utm_campaign=blog&utm_content=readme">Launch Blog</a>
+</h4>
+
+<h4 align="center">
+   <a href="https://github.com/emazzotta/lighthouse-badges">
+    <img src="./results/lighthouse_accessibility.svg" alt="Lighthouse Accessibility Badge">
+  </a>
+   <a href="https://github.com/emazzotta/lighthouse-badges">
+    <img src="./results/lighthouse_best-practices.svg" alt="Lighthouse Best Practices Badge">
+  </a>
+   <a href="https://github.com/emazzotta/lighthouse-badges">
+    <img src="./results/lighthouse_performance.svg" alt="Lighthouse Performance Badge">
+  </a>
+   <a href="https://github.com/emazzotta/lighthouse-badges">
+    <img src="./results/lighthouse_seo.svg" alt="Lighthouse SEO Badge">
+  </a>
+   <a href="https://securityheaders.com/?q=https%3A%2F%2Fwww.privacyprotect.dev%2F&hide=on&followRedirects=on">
+    <img src="https://img.shields.io/security-headers?url=https%3A%2F%2Fwww.privacyprotect.dev%2F" alt="Security headers">
+  </a>
+   <a href="https://www.ssllabs.com/ssltest/analyze.html?d=privacyprotect.dev">
+    <img src="https://img.shields.io/badge/qualys%20ssl-A%2B-brightgreen" alt="SSL Rating">
+  </a>
+   <a href="https://ahrefs.com/site-audit">
+    <img src="https://img.shields.io/badge/ahrefs%20health-100-brightgreen" alt="Ahrefs Health">
+  </a>
+</h4>
+
 [![PrivacyProtect](./static/og.png)](https://www.privacyprotect.dev/)
 
-# End-to-end encryption without special software or accounts
+Share passwords and sensitive files over email or store them in insecure locations like cloud drives using nothing more than desktop or mobile web browsers like Chrome and Safari.
 
-[![Lighthouse Accessibility Badge](./results/lighthouse_accessibility.svg)](https://github.com/emazzotta/lighthouse-badges)
-[![Lighthouse Best Practices Badge](./results/lighthouse_best-practices.svg)](https://github.com/emazzotta/lighthouse-badges)
-[![Lighthouse Performance Badge](./results/lighthouse_performance.svg)](https://github.com/emazzotta/lighthouse-badges)
-[![Lighthouse SEO Badge](./results/lighthouse_seo.svg)](https://github.com/emazzotta/lighthouse-badges) [![security headers](https://img.shields.io/security-headers?url=https%3A%2F%2Fwww.privacyprotect.dev%2F)](https://securityheaders.com/?q=https%3A%2F%2Fwww.privacyprotect.dev%2F&hide=on&followRedirects=on) [![SSL Rating](https://img.shields.io/badge/qualys%20ssl-A%2B-brightgreen)](https://www.ssllabs.com/ssltest/analyze.html?d=privacyprotect.dev) [![Ahrefs Health](https://img.shields.io/badge/ahrefs%20health-100-brightgreen)](https://ahrefs.com/site-audit) [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/RichardLitt/standard-readme)
+No special software. No need to create an account. It’s free, open-source, keeps your private data a secret, and leaves you alone.
 
-Securely share and store passwords and sensitive files using only web browser crypto APIs. Available at [privacyprotect.dev](https://www.privacyprotect.dev/?utm_source=github&utm_medium=social&utm_content=readme).
-
-See the [launch blog](https://www.privacyprotect.dev/blog/introducing-privacyprotect?utm_source=github&utm_medium=social&utm_campaign=blog&utm_content=readme) for details.
+It’s so easy, your parents can use it.
 
 ## Table of Contents
 

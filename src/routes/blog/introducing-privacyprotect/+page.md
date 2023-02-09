@@ -1,6 +1,6 @@
 ---
 title: "Outsmart Hackers with PrivacyProtect: Securely Share Passwords and Store Sensitive  Files in Convenient Locations"
-date: "2023-01-30"
+date: "2023-02-09"
 description: "Securely share secret passwords over text messages, send end-to-end encrypted emails, or store password-protected files on USB and cloud drives."
 images:
   - alt: "PrivacyProtect: Securely share and store passwords and sensitive files."
