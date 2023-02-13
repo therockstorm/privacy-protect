@@ -1,7 +1,7 @@
 import { decrypt, type DecryptRes } from "./decrypt.js";
 import { arrayBufToStr, toFileName } from "./mappers.js";
 import { type Config, strToConfig } from "./template-secret.js";
-import { notEmpty } from "./validators.js";
+import { nonNull } from "./validators.js";
 
 const CONFIG = `{.CONFIG}`;
 const CLS = {
@@ -71,7 +71,7 @@ export async function revealSecret(e?: Event) {
         payloads: config.payloads.map((p) => ({ ...p, password: pw })),
         subtle: window.crypto.subtle,
       })
-    ).filter((r) => notEmpty(r.cipherText))[0];
+    ).filter((r) => nonNull(r.cipherText))[0];
     els.pw.value = "";
   } catch (error) {
     inputError(els.pw, els.pwError, "Password invalid.");

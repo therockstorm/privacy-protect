@@ -6,7 +6,7 @@ import { decrypt, type DecryptRes } from "../../src/lib/decrypt.js";
 import { arrayBufToStr, toFileName } from "../../src/lib/mappers.js";
 import { type Config, strToConfig } from "../../src/lib/template-secret.js";
 import {
-  notEmpty,
+  nonNull,
   validateFile,
   validatePassword,
 } from "../../src/lib/validators.js";
@@ -32,7 +32,7 @@ export async function decryptCli(req: Parsed) {
         payloads: config.payloads.map((p) => ({ ...p, password })),
         subtle: webcrypto.subtle,
       })
-    ).filter((r) => notEmpty(r.cipherText))[0];
+    ).filter((r) => nonNull(r.cipherText))[0];
   } catch (error) {
     exitWithError(PASSWORD_INVALID);
   }

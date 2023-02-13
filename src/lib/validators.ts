@@ -52,7 +52,7 @@ export function validateInput<T>(req: ValidateInputReq<T>) {
   return undefined;
 }
 
-export function notEmpty<T>(value?: T | null): value is T {
+export function nonNull<T>(value?: T | null): value is T {
   return value != null;
 }
 
