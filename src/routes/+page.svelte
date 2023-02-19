@@ -161,6 +161,14 @@
       <a href="/blog/introducing-privacyprotect">launch blog</a> for details.
     </p>
     <p>
+      Are you a developer? It's
+      <a href="https://github.com/therockstorm/privacy-protect">open-source</a>
+      and includes a
+      <a href="https://github.com/therockstorm/privacy-protect#cli"
+        >command-line interface (CLI)</a
+      >.
+    </p>
+    <p>
       Your secret is safe; <strong>it never leaves your device</strong>.
     </p>
     <details>
