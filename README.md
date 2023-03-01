@@ -36,8 +36,6 @@ Share passwords and sensitive files over email or store them in insecure locatio
 
 No special software. No need to create an account. It’s free, open-source, keeps your private data a secret, and leaves you alone.
 
-It’s so easy, your parents can use it.
-
 ## Table of Contents
 
 - [Security](#security)

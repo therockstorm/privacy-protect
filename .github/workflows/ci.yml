@@ -13,10 +13,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 0
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
       - uses: actions/setup-node@v3
-        with: { cache: "npm", node-version: "18" }
-      - run: npm ci
+        with: { cache: "npm", node-version-file: ".tool-versions" }
+      - run: npm ci --audit false --fund false
       - run: npm run lint
