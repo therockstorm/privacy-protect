@@ -7,7 +7,7 @@
   "devDependencies": {
     "@commitlint/cli": "17.4.4",
     "@commitlint/config-conventional": "17.4.4",
-    "@poppanator/sveltekit-svg": "2.1.2",
+    "@poppanator/sveltekit-svg": "3.0.0",
     "@sveltejs/adapter-vercel": "2.0.4",
     "@sveltejs/kit": "1.7.2",
     "@tailwindcss/forms": "0.5.3",
