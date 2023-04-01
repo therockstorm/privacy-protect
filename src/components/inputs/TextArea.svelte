@@ -14,7 +14,7 @@
 
 <div>
   <label class={labelClass} for={id}>{label}</label>
-  <div class="mt-1 ">
+  <div class="mt-1">
     <textarea
       aria-invalid={isError}
       aria-describedby={isError ? errorId : undefined}
