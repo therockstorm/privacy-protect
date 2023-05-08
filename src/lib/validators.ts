@@ -31,7 +31,7 @@ export function validateFile(
   const res = validateInput({ ...req, match, name, val: req.val?.path });
   if (res) return res;
 
-  const sizeMb = req.val != null && req.val.size / 1024 / 1024;
+  const sizeMb = req.val != null ? req.val.size / 1024 / 1024 : 0;
   if (match && sizeMb <= 0 && !req.lenient) return `${name} required.`;
 
   return sizeMb > MAX_FILE_SIZE_MB
