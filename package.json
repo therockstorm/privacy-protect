@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@commitlint/cli": "17.7.1",
+    "@commitlint/cli": "17.7.2",
     "@commitlint/config-conventional": "17.7.0",
     "@poppanator/sveltekit-svg": "3.0.1",
     "@sveltejs/adapter-vercel": "3.0.3",
@@ -26,7 +26,7 @@
     "husky": "8.0.3",
     "mdsvex": "0.11.0",
     "npm-check-updates": "16.14.4",
-    "postcss": "8.4.30",
+    "postcss": "8.4.31",
     "prettier": "2.8.8",
     "prettier-plugin-svelte": "2.10.1",
     "svelte": "3.59.2",
