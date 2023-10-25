@@ -49,7 +49,7 @@ export function templateSecret(req: TemplateSecretReq): string {
 (() => {`,
         ""
       )
-      .replace("`{.CONFIG}`", JSON.stringify(config))
+      .replace(`"{.CONFIG}"`, "`" + JSON.stringify(config) + "`")
   );
 }
 
