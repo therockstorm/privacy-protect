@@ -5,8 +5,8 @@
   "private": true,
   "type": "module",
   "devDependencies": {
-    "@commitlint/cli": "17.7.2",
-    "@commitlint/config-conventional": "17.7.0",
+    "@commitlint/cli": "18.2.0",
+    "@commitlint/config-conventional": "18.1.0",
     "@poppanator/sveltekit-svg": "3.0.1",
     "@sveltejs/adapter-vercel": "3.0.3",
     "@sveltejs/kit": "1.25.1",
