@@ -17,7 +17,7 @@
     "@vitejs/plugin-basic-ssl": "1.0.1",
     "autoprefixer": "10.4.16",
     "eslint": "8.52.0",
-    "eslint-config-prettier": "8.10.0",
+    "eslint-config-prettier": "10.0.2",
     "eslint-plugin-simple-import-sort": "12.1.1",
     "eslint-plugin-sonarjs": "0.21.0",
     "eslint-plugin-svelte3": "4.0.0",
