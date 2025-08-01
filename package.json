@@ -14,7 +14,7 @@
     "@tailwindcss/typography": "0.5.10",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
-    "@vitejs/plugin-basic-ssl": "1.0.1",
+    "@vitejs/plugin-basic-ssl": "2.1.0",
     "autoprefixer": "10.4.16",
     "eslint": "8.52.0",
     "eslint-config-prettier": "10.0.2",
