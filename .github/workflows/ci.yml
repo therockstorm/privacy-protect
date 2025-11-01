@@ -15,7 +15,7 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with: { cache: "npm", node-version-file: ".tool-versions" }
       - run: npm ci --audit false --fund false
       - run: npm run lint
