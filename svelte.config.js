@@ -7,7 +7,7 @@ import { resolve } from "path";
 export default {
   extensions: [".md", ".svelte"],
   kit: {
-    adapter: adapter(),
+    adapter: adapter({ runtime: "nodejs22.x" }),
     alias: {
       $components: resolve("src/components"),
       $icons: resolve("src/assets/icons"),

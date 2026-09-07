@@ -19,3 +19,4 @@ jobs:
         with: { cache: "npm", node-version-file: ".tool-versions" }
       - run: npm ci --audit false --fund false
       - run: npm run lint
+      - run: npm run build
