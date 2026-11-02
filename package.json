@@ -11,13 +11,13 @@
     "@commitlint/cli": "19.3.0",
     "@commitlint/config-conventional": "19.2.2",
     "@poppanator/sveltekit-svg": "3.0.1",
-    "@sveltejs/adapter-vercel": "3.1.0",
-    "@sveltejs/kit": "1.30.4",
+    "@sveltejs/adapter-vercel": "7.0.2",
+    "@sveltejs/kit": "3.1.1",
     "@tailwindcss/forms": "0.5.6",
     "@tailwindcss/typography": "0.5.10",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
-    "@vitejs/plugin-basic-ssl": "1.0.1",
+    "@vitejs/plugin-basic-ssl": "1.2.0",
     "autoprefixer": "10.4.16",
     "eslint": "8.52.0",
     "eslint-config-prettier": "10.0.2",
@@ -38,7 +38,7 @@
     "ts-node": "10.9.1",
     "tslib": "2.6.2",
     "typescript": "5.2.2",
-    "vite": "4.5.9"
+    "vite": "8.3.5"
   },
   "scripts": {
     "badges": "docker run --rm -v $PWD/results:/home/chrome/reports emazzotta/lighthouse-badges /bin/sh -c \"lighthouse-badges --urls https://www.privacyprotect.dev/\"",
